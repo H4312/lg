@@ -1,8 +1,9 @@
 #ifndef ETAT_H
 #define ETAT_H
 
-#include "Automate.h"
+
 #include "Symbole.h"
+class Automate;
 
 
 class Etat

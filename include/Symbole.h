@@ -8,10 +8,12 @@ using namespace std;
 class Symbole
 {
     public:
-        Symbole();
+        Symbole(int id) : ident(id) {}
         virtual ~Symbole();
         virtual bool eval(string s) = 0;
+        operator int() const {return ident;}
     protected:
+        int ident;
     private:
 };
 

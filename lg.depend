@@ -1,27 +1,31 @@
 # depslib dependency file v1.0
-1385316878 source:c:\users\vadim\workspace\lg\main.cpp
+1426237059 source:c:\users\vadim\workspace\lg\main.cpp
 	<iostream>
+	"Automate.h"
 
 1426234453 source:c:\users\vadim\workspace\lg\src\automate.cpp
 	"Automate.h"
 
-1426234453 c:\users\vadim\workspace\lg\include\automate.h
+1426238360 c:\users\vadim\workspace\lg\include\automate.h
+	<string>
+	"Symbole.h"
+	"Etat.h"
 
 1426234556 source:c:\users\vadim\workspace\lg\src\etat.cpp
 	"Etat.h"
 
-1426235125 c:\users\vadim\workspace\lg\include\etat.h
-	"Automate.h"
+1426237663 c:\users\vadim\workspace\lg\include\etat.h
 	"Symbole.h"
 
-1426235228 c:\users\vadim\workspace\lg\include\symbole.h
+1426237129 c:\users\vadim\workspace\lg\include\symbole.h
 	<string>
 
 1426234359 source:c:\users\vadim\workspace\lg\src\lexer.cpp
 	"Lexer.h"
 
-1426234359 c:\users\vadim\workspace\lg\include\lexer.h
+1426237916 c:\users\vadim\workspace\lg\include\lexer.h
+	"Symbole.h"
 
-1426234720 source:c:\users\vadim\workspace\lg\src\symbole.cpp
+1426237968 source:c:\users\vadim\workspace\lg\src\symbole.cpp
 	"Symbole.h"
 

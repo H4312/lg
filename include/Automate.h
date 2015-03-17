@@ -5,6 +5,7 @@
 
 #include "Symbole.h"
 #include "Etat.h"
+#include "Lexer.h"
 using namespace std;
 
 
@@ -17,6 +18,7 @@ class Automate
         virtual ~Automate();
     protected:
     private:
+        Lexer lexer;
 };
 
 #endif // AUTOMATE_H

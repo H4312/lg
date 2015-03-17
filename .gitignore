@@ -3,3 +3,6 @@
 *.o
 bin/
 debug/
+*.layout
+*.depend
+

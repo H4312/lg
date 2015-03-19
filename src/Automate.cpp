@@ -16,3 +16,7 @@ void Automate::lecture(char* filename)
 {
 
 }
+
+void Automate::decalage(Symbole *sym, Etat *etat) {
+
+}

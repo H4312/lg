@@ -3,6 +3,8 @@
 *.o
 bin/
 debug/
+obj/
+.idea/
 *.layout
 *.depend
 

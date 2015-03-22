@@ -10,7 +10,7 @@ class Symbole
     public:
         Symbole(int id) : ident(id) {}
         virtual ~Symbole();
-        virtual bool eval(string s) = 0;
+        virtual bool eval(string s){return false;}
         operator int() const {return ident;}
     protected:
         int ident;

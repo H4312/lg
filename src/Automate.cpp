@@ -12,9 +12,9 @@ Automate::~Automate()
     //dtor
 }
 
-void Automate::lecture(char* filename)
+void Automate::lecture(const char* filename)
 {
-
+    lexer.readCurrent();
 }
 
 void Automate::decalage(Symbole *sym, Etat *etat) {

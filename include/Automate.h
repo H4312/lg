@@ -13,7 +13,7 @@ class Automate
 {
     public:
         Automate();
-        void lecture(char* filename);
+        void lecture(const char* filename);
         void decalage(Symbole* sym, Etat* etat);
         virtual ~Automate();
     protected:

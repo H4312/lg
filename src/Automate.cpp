@@ -1,3 +1,4 @@
+
 #include "Automate.h"
 #include "Symbole.h"
 
@@ -60,6 +61,18 @@ map<Etat*, map<TYPE, Etat*> > Automate::initMap() {
 		
 	// Initialiser un vector avec 43 pour les etats
 	vector<Etat*> etats(nombreEtats, NULL);
+	
+	// Initialiser tous les états
+	list<Symbole*> listeVide;
+	
+	etats[0].setGauche(Symbole::BD);
+	etats[0].setDroite(listeVide);
+	
+	etats[1].setGauche(Symbole::BI);
+	etats[1].setDroite(listeVide);
+	
+	etats[2].setGauche(Symbole::P); list<Symbole*> droite2; droite2.push_back(Symbole::BD); droite2.push_back(Symbole::BI);
+	etats[2].setDroite(droite2);
 		
 	map<TYPE, Etat*> transitions_initialize;
 	transitions_initialize.insert(make_pair(Symbole::P, etats.at(1)));
@@ -191,6 +204,7 @@ map<Etat*, map<TYPE, Etat*> > Automate::initMap() {
 	// Ajoutons-les dans m_transitions
 	for(int i = 0; i < m_transitions.size(); i++) {
 		m_transitions.insert(make_pair(etats[i], transitions[i]));
+		
 	}
 	
 	return m_transitions;

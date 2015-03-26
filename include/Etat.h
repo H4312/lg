@@ -12,12 +12,12 @@ class Etat
         Etat();
         virtual ~Etat();
         list<Symbole> getDroite();
-        enum type getGauche();
+        Symbole::TYPE getGauche();
         int getNbr();
     protected:
     private:
         list<Symbole*> m_droite;
-        enum type m_gauche;
+        Symbole::TYPE m_gauche;
         int m_nbr;
 };
 

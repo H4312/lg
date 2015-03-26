@@ -23,7 +23,7 @@ class Automate
     protected:
     private:
         Lexer lexer;
-        map<Etat*, map<TYPE, Etat*> > m_transitions;
+        map<Etat*, map<Symbole::TYPE , Etat*> > m_transitions;
         Symbole* currentSym;
         stack<Etat*> m_etats;
         stack<Symbole*> m_symboles;

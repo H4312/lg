@@ -1,5 +1,5 @@
 #include "Lexer.h"
-#include <fstream>
+#include "Symbole.h"
 #include <iostream>
 
 Lexer::Lexer()
@@ -103,26 +103,7 @@ Symbole *Lexer::readNext() {
 }
 
 bool Lexer::cursorNext() {
-    /*
-    * We take the next char or the first char of the
-    * next line if we are at the end of the line
-    */
-    if(current_char_number >= current_line.length()) {
-        if(getline(this->file, current_line)) {
-            current_line_number++;
-            current_char_number = 0;
-        } else {
-            cout << "Fin du fichier" << endl;
-            return false;
-        }
-    } else {
-        current_char_number++;
-    }
-    return true;
-}
 
-string Lexer::readSymbole() {
-    while(this->current_line.length());
 }
 
 void Lexer::DisplaySplittedFile() {
@@ -133,4 +114,66 @@ void Lexer::DisplaySplittedFile() {
 
 bool Lexer::isFileOpen() {
     return this->file.is_open();
+}
+
+
+Symbole *Lexer::getSymbole(string str) {
+    Symbole* sym = nullptr;
+    if(str == "const") {
+        sym = new Symbole(Symbole::cons);
+    } else if(str == "var") {
+        sym = new Symbole(Symbole::var);
+    } else if(str == ":=") {
+        sym = new Symbole(Symbole::aff);
+    } else if(str == "=") {
+        sym = new Symbole(Symbole::eq);
+    } else if(str == "+") {
+        sym = new Symbole(Symbole::pl);
+    } else if(str == "-") {
+        sym = new Symbole(Symbole::mn);
+    } else if(str == "*") {
+        sym = new Symbole(Symbole::mul);
+    } else if(str == ";") {
+        sym = new Symbole(Symbole::pv);
+    } else if(str == ",") {
+        sym = new Symbole(Symbole::v);
+    } else if(str == "/") {
+        sym = new Symbole(Symbole::divi);
+    } else if(isOnlyDouble(str.c_str())) {
+        sym = new Symbole(Symbole::val);
+    } else if(isIdentifier(str)) {
+        sym = new Symbole(Symbole::id);
+    }
+
+    return sym;
+}
+
+bool Lexer::isInteger(const std::string & s)
+{
+    if(s.empty() || ((!isdigit(s[0])))) return false ;
+
+    char * p ;
+    strtol(s.c_str(), &p, 10) ;
+
+    return (*p == 0) ;
+}
+
+bool Lexer::isOnlyDouble(const char* str)
+{
+
+    if(!isdigit(str[0])) return false;
+    char* endptr = 0;
+    strtod(str, &endptr);
+
+    if(*endptr != '\0' || endptr == str)
+        return false;
+    return true;
+}
+
+bool Lexer::isIdentifier(const std::string & s) {
+    if(!isalpha(s[0])) return false;
+    for(int i = 1; i < s.length(); i++) {
+        if(!isalnum(s[i])) return false;
+    }
+    return true;
 }

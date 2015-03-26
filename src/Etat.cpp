@@ -11,7 +11,7 @@ Etat::~Etat()
 }
 
 
-enum type Etat::getGauche()
+Symbole::TYPE Etat::getGauche()
 {
     return m_gauche;
 }

@@ -5,14 +5,20 @@
 
 using namespace std;
 
-typedef enum type
-{P, BD, BI, D, pv, E, I, val, L, cons, C, v, id, eq, ecrire, O, lire, aff, opA, T, opM, F, po, pf, pl, mn, mul, divi} TYPE;
-
 class Symbole
 {
     public:
-        Symbole(TYPE unType);
-        TYPE getType();
+
+    enum TYPE
+    {P, BD, BI, D, pv, E, I, val, L, cons, var, C, v, id, eq, ecrire, O, lire, aff, opA, T, opM, F, po, pf, pl, mn, mul, divi};
+
+    Symbole(TYPE unType);
+
+    virtual ~Symbole();
+
+
+
+    TYPE getType();
         void ajouterFils(Symbole*);
     protected:
     private:

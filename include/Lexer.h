@@ -20,25 +20,28 @@ class Lexer
         void closeFile();
         Symbole* readCurrent();
         Symbole* readNext();
-        bool moveNext();
+    bool moveNext();
+    Symbole* getSymbole(string str);
     void splitFileBySym();
 
+    bool isIdentifier(string const &s);
+    bool isInteger(string const &s);
     void DisplaySplittedFile();
+    bool isOnlyDouble(char const *str);
 
 protected:
-    private:
-        std::list< pair<string,Symbole>> matchingMap;
-        fstream file;
-        unsigned int current_line_number;
-        unsigned int current_char_number;
-        string current_line;
-        string current_word;
-        vector<string> *splittedFile = new vector<string>;
-        bool cursorNext();
+private:
+    std::list< pair<string,Symbole>> matchingMap;
+    fstream file;
+    unsigned int current_line_number;
+    unsigned int current_char_number;
+    string current_line;
+    string current_word;
+    vector<string> *splittedFile = new vector<string>;
+    bool cursorNext();
+
+
         string readSymbole();
-
-
-
 };
 
 #endif // LEXER_H

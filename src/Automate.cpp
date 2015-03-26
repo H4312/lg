@@ -15,10 +15,20 @@ Automate::~Automate()
 void Automate::lecture(char* filename)
 {
 
+
 }
 
 void Automate::analyser()
 {
+    if (currentSym==NULL)
+    {
+        currentSym = lexer.readNext();
+        if (currentSym==NULL)
+        {
+            return;
+        }
+    }
+
     Etat* n = m_transitions.find(m_etats.top())->second.find(currentSym->getType())->second;
 
     if (n!=NULL)
@@ -48,5 +58,5 @@ void Automate::reduire()
         m_etats.pop();
         m_symboles.pop();
     }
-    m_symboles.push(s);
+    currentSym = s;
 }

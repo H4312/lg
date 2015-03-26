@@ -16,3 +16,8 @@ void Symbole::ajouterFils(Symbole* symb)
     m_fils->push_front(symb);
 }
 
+list<Symbole*>* Symbole::getFils()
+{
+    return m_fils;
+}
+

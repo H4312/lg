@@ -1,4 +1,4 @@
-w#include "Automate.h"
+#include "Automate.h"
 #include "Symbole.h"
 
 using namespace std;

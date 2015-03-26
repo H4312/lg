@@ -4,7 +4,7 @@
 
 Lexer::Lexer()
 {
-    matchingMap.emplace(matchingMap.end(), "+", NULL);
+   /* matchingMap.emplace(matchingMap.end(), "+", NULL);
     matchingMap.emplace(matchingMap.end(), "-", NULL);
     matchingMap.emplace(matchingMap.end(), "*", NULL);
     matchingMap.emplace(matchingMap.end(), "/", NULL);
@@ -17,7 +17,7 @@ Lexer::Lexer()
     matchingMap.emplace(matchingMap.end(), "var", NULL); //var
 
     matchingMap.emplace(matchingMap.end(), "(\\+|-)?[[:digit:]]+", NULL); //Integer
-    matchingMap.emplace(matchingMap.end(), "[a-Z][a-Z0-9]*", NULL); //id
+    matchingMap.emplace(matchingMap.end(), "[a-Z][a-Z0-9]*", NULL); //id*/
 }
 
 Lexer::~Lexer()

@@ -6,19 +6,28 @@
 #include "Symbole.h"
 #include "Etat.h"
 #include "Lexer.h"
-using namespace std;
+#include <stack>
+#include <map>
 
+using namespace std;
 
 class Automate
 {
     public:
         Automate();
         void lecture(const char* filename);
-        void decalage(Symbole* sym, Etat* etat);
+        void analyser();
+        void decalage(Etat* etat);
+        void reduire();
         virtual ~Automate();
     protected:
     private:
         Lexer lexer;
+        map<Etat*, map<TYPE, Etat*> > m_transitions;
+        Symbole* currentSym;
+        stack<Etat*> m_etats;
+        stack<Symbole*> m_symboles;
 };
+
 
 #endif // AUTOMATE_H

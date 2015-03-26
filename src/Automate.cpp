@@ -17,6 +17,36 @@ void Automate::lecture(const char* filename)
     lexer.readCurrent();
 }
 
-void Automate::decalage(Symbole *sym, Etat *etat) {
+void Automate::analyser()
+{
+    Etat* n = m_transitions.find(m_etats.top())->second.find(currentSym->getType())->second;
 
+    if (n!=NULL)
+    {
+        decalage(n);
+    }
+    else
+    {
+        reduire();
+    }
+}
+
+void Automate::decalage(Etat *etat)
+{
+    m_etats.push(etat);
+    m_symboles.push(currentSym);
+    currentSym=NULL;
+}
+
+void Automate::reduire()
+{
+    Etat* etat = m_etats.top();
+    Symbole* s = new Symbole(etat->getGauche());
+    for(int i = 0 ; i < etat->getNbr() ; i++ )
+    {
+        s->ajouterFils(m_symboles.top());
+        m_etats.pop();
+        m_symboles.pop();
+    }
+    m_symboles.push(s);
 }

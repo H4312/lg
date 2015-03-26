@@ -75,10 +75,13 @@ map<Etat*, map<TYPE, Etat*> > Automate::initMap() {
 	// Initialiser un vector avec 43 pour les etats
 	vector<Etat*> etats(nombreEtats, NULL);
 		
+	map<TYPE, Etat*> transitions_initialize;
+	transitions_initialize.insert(make_pair(P, etats.at(1)));
+		
 	// Initialiser un vector avec 43 pour les transitions
 	// et ajouter les transitions correspondantes
 	// (Attention: etats.at(0) et E0 égal à l'état1 dans l'automate)
-	vector< map<TYPE, Etat*> > transitions(nombreEtats);
+	vector< map<TYPE, Etat*> > transitions(nombreEtats, transitions_initialize);
 		
 	transitions[0].insert(make_pair(BD, etats.at(1)));
 		

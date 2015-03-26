@@ -3,17 +3,24 @@
 # to the root binary directory of the project as ${HELLO_BINARY_DIR}.
 cmake_minimum_required (VERSION 2.8.11)
 project (LG)
+enable_testing()
 
 set(EXECUTABLE_OUTPUT_PATH bin/${CMAKE_BUILD_TYPE})
+list( APPEND CMAKE_CXX_FLAGS "-std=c++0x ${CMAKE_CXX_FLAGS} -g -ftest-coverage -fprofile-arcs")
+
+
+# Check for CppUTest and bail out if they don't have it
+#if(DEFINED ENV{CPPUTEST_HOME})
+#  message("Using CppUTest found in $ENV{CPPUTEST_HOME}")
+#else()
+#  message("CPPUTEST_HOME is not set; You must tell CMake where to find CppUTest")
+#  return()
+#endif()
+
 
 include_directories(include)
-
-# Recurse into the "Hello" and "Demo" subdirectories. This does not actually
-# cause another cmake executable to run. The same process will walk through
-# the project's entire directory structure.
-#add_subdirectory (include)
-#add_subdirectory (src)
-
+add_subdirectory(test)
+add_subdirectory(res)
 
 
 file(
@@ -32,6 +39,14 @@ file(
     include/*
 )
 
+file(
+    GLOB_RECURSE
+
+    test_files
+
+    test/*
+)
+
 add_executable(
 
     lg
@@ -40,6 +55,22 @@ add_executable(
 
     ${header_files}
 
+    main.cpp
+
 )
+
+add_executable(
+
+    testsuite
+
+    ${source_files}
+
+    ${header_files}
+
+    ${test_files}
+
+)
+
+target_link_libraries(testsuite CppUTest)
 
 install(TARGETS lg DESTINATION bin)

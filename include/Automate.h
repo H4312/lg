@@ -15,10 +15,11 @@ class Automate
 {
     public:
         Automate();
-        void lecture(char* filename);
+        void lecture(const char* filename);
         void analyser();
         void decalage(Etat* etat);
         void reduire();
+		map<Etat*, map<TYPE, Etat*> > initMap();
         virtual ~Automate();
     protected:
     private:

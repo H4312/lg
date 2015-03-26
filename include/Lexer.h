@@ -27,7 +27,7 @@ class Lexer
 
 protected:
     private:
-        std::list< pair<string,Symbole>> matchingMap;
+        std::list< pair<string,Symbole> > matchingMap;
         fstream file;
         unsigned int current_line_number;
         unsigned int current_char_number;

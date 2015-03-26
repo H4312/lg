@@ -15,7 +15,6 @@ TEST(Lexer, OpenFile)
 TEST(Lexer, SplitFile)
 {
 
-
     Lexer lexer;
     lexer.openFile((char *) "res/programme_ok.txt");
     lexer.splitFileBySym();

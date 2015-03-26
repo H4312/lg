@@ -14,6 +14,8 @@ class Etat
         list<Symbole> getDroite();
         Symbole::TYPE getGauche();
         int getNbr();
+		void setGauche(TYPE);
+		void setDroite(list<Symbole*>);
     protected:
     private:
         list<Symbole*> m_droite;

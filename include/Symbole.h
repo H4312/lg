@@ -4,7 +4,6 @@
 #include <list>
 
 using namespace std;
-
 class Symbole
 {
     public:
@@ -27,6 +26,8 @@ class Symbole
         double m_value;
         list<Symbole*>* m_fils;
 };
+
+typedef Symbole::TYPE TYPE;
 
 
 #endif // SYMBOLE_H

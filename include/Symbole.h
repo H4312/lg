@@ -6,7 +6,7 @@
 using namespace std;
 
 typedef enum type
-{P, BD, BI, D, pv, E, I, val, L, cons, C, v, id, eq, ecrire, O, lire, aff, opA, T, opM, F, po, pf, pl, mn, mul, div} TYPE;
+{P, BD, BI, D, pv, E, I, val, L, cons, C, v, id, eq, ecrire, O, lire, aff, opA, T, opM, F, po, pf, pl, mn, mul, divi} TYPE;
 
 class Symbole
 {

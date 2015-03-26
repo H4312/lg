@@ -1,6 +1,8 @@
 #include <CppUTest/CommandLineTestRunner.h>
 #include <Automate.h>
 #include <algorithm>
+#include <string.h>
+#include <strings.h>
 
 TEST_GROUP(Lexer) {
 };
@@ -68,7 +70,24 @@ TEST(Lexer, getSymbole) {
     delete sym;
     CHECK((sym = lexer.getSymbole("2"))->getType() == Symbole::val);
     delete sym;
+}
 
+TEST(Lexer, readNext) {
+    Lexer lexer;
+    lexer.openFile((char *) "res/programme_ok.txt");
+    lexer.splitFileBySym();
+    Symbole * sym;
+    int index = 0;
+
+
+    CHECK((sym = lexer.readNext())->getType() == Symbole::var);
+    delete sym;
+    CHECK((sym = lexer.readNext())->getType() == Symbole::id);
+    delete sym;
+    CHECK((sym = lexer.readNext())->getType() == Symbole::pv);
+    delete sym;
+    CHECK((sym = lexer.readNext())->getType() == Symbole::cons);
+    delete sym;
 
 }
 

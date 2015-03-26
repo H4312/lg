@@ -15,7 +15,7 @@ Automate::~Automate()
 
 void Automate::lecture(const char* filename)
 {
-    lexer.readCurrent();
+
 }
 
 void Automate::analyser()

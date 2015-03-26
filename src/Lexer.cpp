@@ -91,20 +91,13 @@ void Lexer::closeFile()
     this->file.close();
 }
 
-Symbole *Lexer::readCurrent() {
 
-    cout << current_line << endl;
-    return NULL;
-}
 
 Symbole *Lexer::readNext() {
-    cursorNext();
-    return NULL;
+    if(current_symbole >= splittedFile->size()) return 0;
+    return getSymbole(splittedFile->at(current_symbole++));
 }
 
-bool Lexer::cursorNext() {
-
-}
 
 void Lexer::DisplaySplittedFile() {
     for(auto& elem : *this->splittedFile) {

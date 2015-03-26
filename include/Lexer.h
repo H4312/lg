@@ -33,12 +33,8 @@ protected:
 private:
     std::list< pair<string,Symbole>> matchingMap;
     fstream file;
-    unsigned int current_line_number;
-    unsigned int current_char_number;
-    string current_line;
-    string current_word;
+    int current_symbole = 0;
     vector<string> *splittedFile = new vector<string>;
-    bool cursorNext();
 
 
         string readSymbole();

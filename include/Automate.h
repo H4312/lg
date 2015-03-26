@@ -11,7 +11,6 @@
 
 using namespace std;
 
-
 class Automate
 {
     public:
@@ -29,5 +28,6 @@ class Automate
         stack<Etat*> m_etats;
         stack<Symbole*> m_symboles;
 };
+
 
 #endif // AUTOMATE_H

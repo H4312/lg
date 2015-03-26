@@ -22,4 +22,5 @@ class Symbole
         list<Symbole*>* m_fils;
 };
 
+
 #endif // SYMBOLE_H

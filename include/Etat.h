@@ -13,11 +13,13 @@ class Etat
         virtual ~Etat();
         list<Symbole> getDroite();
         enum type getGauche();
+        void setDroite(list<Symbole*>);
+        void setGauche(TYPE);
         int getNbr();
     protected:
     private:
         list<Symbole*> m_droite;
-        enum type m_gauche;
+        TYPE m_gauche;
         int m_nbr;
 };
 

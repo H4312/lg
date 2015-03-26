@@ -28,6 +28,7 @@ class Automate
         Symbole* currentSym;
         stack<Etat*> m_etats;
         stack<Symbole*> m_symboles;
+        list<Symbole*>* ex;
 };
 
 

@@ -22,6 +22,8 @@ class Symbole
         string m_nom;
         double m_value;
         list<Symbole*>* m_fils;
+
+    void afficher();
 };
 
 typedef Symbole::TYPE TYPE;

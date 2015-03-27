@@ -31,13 +31,13 @@ class Lexer
 
 protected:
 private:
-    std::list< pair<string,Symbole>> matchingMap;
+    std::list< pair<string,Symbole> > matchingMap;
     fstream file;
     int current_symbole = 0;
     vector<string> *splittedFile = new vector<string>;
+    bool cursorNext();
+    string readSymbole();
 
-
-        string readSymbole();
 };
 
 #endif // LEXER_H

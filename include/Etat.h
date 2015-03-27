@@ -15,10 +15,10 @@ class Etat
         Symbole::TYPE getGauche();
         int getNbr();
 		void setGauche(TYPE);
-		void setDroite(list<Symbole*>);
+		void setDroite(list<TYPE>);
     protected:
     private:
-        list<Symbole*> m_droite;
+        list<TYPE> m_droite;
         Symbole::TYPE m_gauche;
         int m_nbr;
 };

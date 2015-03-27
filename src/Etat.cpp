@@ -10,11 +10,11 @@ Etat::~Etat()
     //dtor
 }
 
-void setGauche(TYPE coteGauche) {
+void Etat::setGauche(TYPE coteGauche) {
 	m_gauche = coteGauche;
 }
 
-void setDroite(list<Symbole*> coteDroite) {
+void Etat::setDroite(list<TYPE> coteDroite) {
 	m_droite = coteDroite;
 }
 

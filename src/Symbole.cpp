@@ -49,7 +49,6 @@ void Symbole::setValue(double value)
     m_value = value ;
 }
 
-
 void Symbole::ConstruireTableSymbole(TableSymbole &table){
 	TYPE type = this->getType();
 	list<Symbole*> fils = this->getFils() ;
@@ -176,3 +175,38 @@ void Symbole::ConstruireDeclarationConst(TableSymbole &table){
 		}
 	}
 }
+
+double Symbole::eval()
+{
+	list<Symbole*> fils = this->getFils();
+	
+	list<Symbole*>::const_iterator itDebut=fils.begin(); 
+	list<Symbole*>::const_iterator itMilieu=++fils.begin();
+	list<Symbole*>::const_iterator itFin=fils.end(); 
+	
+	cout << (*itMilieu)->getType() << endl ;
+	switch((*itMilieu)->getType())
+	{
+		case(opA) :
+			cout << "ca rentre dans le 1er OKLM" << endl ;
+			list<Symbole*>::const_iterator operateur=(*itMilieu)->getFils().begin(); 
+			
+			cout << (*operateur)->getType() << endl ;
+			switch((*operateur)->getType())
+			{
+				case(pl) :
+					cout << "ca rentre OKLM" << endl;
+					(*itDebut)->eval()+(*itFin)->eval();
+					break;
+				case(mn) :
+					(*itDebut)->eval()-(*itFin)->eval();
+					break;
+				default : 
+					break ;
+			}
+			break;
+		
+	}
+}
+
+

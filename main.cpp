@@ -11,6 +11,15 @@ int main(int argc, char** argv)
 {
 	Automate a;
 	Symbole* p = new Symbole(P);
+	
+	Symbole* bi = new Symbole(BI);
+	Symbole* i = new Symbole(I);
+	Symbole* o = new Symbole(O);
+	Symbole* o2 = new Symbole(O);
+	Symbole* opa = new Symbole(opA);
+	Symbole* plus = new Symbole(pl);
+	Symbole* t = new Symbole(T);
+	
 	Symbole* bd = new Symbole(BD);
 	Symbole* bd1 = new Symbole(BD);
 	Symbole* bd2 = new Symbole(BD);
@@ -22,9 +31,18 @@ int main(int argc, char** argv)
 	Symbole* l2 = new Symbole(L);
 	Symbole* id_ = new Symbole(id, "x");
 
-	cout << id_->getNom() << endl ;
-
 	p->ajouterFils(bd);
+	p->ajouterFils(bi);
+	
+	bi->ajouterFils(i);
+	i->ajouterFils(o);
+	o->ajouterFils(o2);
+	o->ajouterFils(opa);
+	o->ajouterFils(t);
+	
+	opa->ajouterFils(plus);
+
+	
 	bd->ajouterFils(d1);
 	d1->ajouterFils(var_);
 	d1->ajouterFils(l);
@@ -47,15 +65,8 @@ int main(int argc, char** argv)
 	
 	TableSymbole table;
 	p->ConstruireTableSymbole(table);
-	table.afficherTable();
-
-	cout << table.findById("y").getVal() << endl ;
-
-	cout << endl;
-	cout << endl;
-	cout << endl;
-	cout << endl;
-    //Automate automate;
-    //automate.lecture(argv[argc - 1]);
+	//table.afficherTable();
+	o->eval();
+	
     return 0;
 }

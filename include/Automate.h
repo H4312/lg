@@ -19,12 +19,12 @@ class Automate
         void analyser();
         void decalage(Etat* etat);
         void reduire();
-		map<Etat*, map<TYPE, Etat*> > initMap();
+		map<Etat*, map<Symbole::TYPE, Etat*> > initMap();
         virtual ~Automate();
     protected:
     private:
         Lexer lexer;
-        map<Etat*, map<TYPE, Etat*> > m_transitions;
+        map<Etat*, map<Symbole::TYPE , Etat*> > m_transitions;
         Symbole* currentSym;
         stack<Etat*> m_etats;
         stack<Symbole*> m_symboles;

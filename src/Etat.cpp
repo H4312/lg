@@ -10,8 +10,15 @@ Etat::~Etat()
     //dtor
 }
 
+void Etat::setGauche(TYPE coteGauche) {
+	m_gauche = coteGauche;
+}
 
-enum type Etat::getGauche()
+void Etat::setDroite(list<TYPE> coteDroite) {
+	m_droite = coteDroite;
+}
+
+Symbole::TYPE Etat::getGauche()
 {
     return m_gauche;
 }

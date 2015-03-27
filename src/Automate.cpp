@@ -60,7 +60,7 @@ void Automate::reduire()
     Etat* etat = m_etats.top();
     Symbole* s = new Symbole(etat->getGauche());
     for(int i = 0 ; i < etat->getNbr() ; i++ )
-    {
+	{
         s->ajouterFils(m_symboles.top());
         m_etats.pop();
         m_symboles.pop();

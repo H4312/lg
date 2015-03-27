@@ -27,32 +27,41 @@ Symbole::~Symbole() {
 
 }
 
-void Symbole::afficher() {
+string Symbole::toString() {
 
     switch(m_type)
     {
-        case pv : cout << ";\n"; break;
-        case val : cout << m_value; break;
-        case cons : cout << "cons "; break;
-        case var : cout << "var "; break;
-        case v : cout << ", "; break;
-        case id : cout << m_nom; break;
-        case eq : cout << "="; break;
-        case ecrire : cout << "ecrire "; break;
-        case lire : cout << "lire "; break;
-        case aff : cout << ":= "; break;
-        case po : cout << "("; break;
-        case pf : cout << ")"; break;
-        case pl : cout << "+"; break;
-        case mn : cout << "-"; break;
-        case mul : cout << "*"; break;
-        case divi : cout << "/"; break;
+        case pv : return ";\n";
+        case val : return to_string(m_value);
+        case cons : return "cons ";
+        case var : return "var ";
+        case v : return ", ";
+        case id : return m_nom;
+        case eq : return "=";
+        case ecrire : return "ecrire ";
+        case lire : return "lire ";
+        case aff : return ":= ";
+        case po : return "(";
+        case pf : return ")";
+        case pl : return "+";
+        case mn : return "-";
+        case mul : return "*";
+        case divi : return "/";
         default:
+            string result = "";
             list<Symbole *> *fils = this->getFils();
             for(Symbole *s : *fils) {
-                s->afficher();
+
+                result = s->toString() + result;
             }
-            break;
+            return result;
     }
 }
 
+void Symbole::setValue(double d) {
+    m_value = d;
+}
+
+void Symbole::setName(string name) {
+    m_nom = name;
+}

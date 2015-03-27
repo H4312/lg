@@ -16,14 +16,21 @@ class Symbole
     TYPE getType();
     void ajouterFils(Symbole*);
     list<Symbole*>* getFils();
-    protected:
+    void setValue(double d);
+    void setName(string name);
+    string get_nom() const {return m_nom; }
+    double get_value() const {return m_value; }
+    string toString();
+
+protected:
     private:
         TYPE m_type;
         string m_nom;
         double m_value;
         list<Symbole*>* m_fils;
 
-    void afficher();
+
+
 };
 
 typedef Symbole::TYPE TYPE;

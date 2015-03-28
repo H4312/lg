@@ -1,4 +1,4 @@
-
+#include <iostream>
 #include "Automate.h"
 #include "Symbole.h"
 
@@ -21,31 +21,31 @@ Automate::~Automate()
     //dtor
 }
 
-void Automate::lecture(const char* filename)
+void Automate::lecture(char* filename)
 {
+
+	//analyser();
 }
 
 void Automate::analyser()
 {
-    if (currentSym==NULL)
-    {
-        currentSym = lexer.readNext();
-        if (currentSym==NULL)
-        {
-            return;
-        }
-    }
+		if (currentSym == NULL) {
+			currentSym = lexer.readNext();
+			cout<<currentSym->getType()<<endl;
+			if (currentSym == NULL) {
+				return;
+			}
+		}
 
-    Etat* n = m_transitions.find(m_etats.top())->second.find(currentSym->getType())->second;
+		Etat *n = m_transitions.find(m_etats.top())->second.find(currentSym->getType())->second;
 
-    if (n!=NULL)
-    {
-        decalage(n);
-    }
-    else
-    {
-        reduire();
-    }
+		if (n != NULL) {
+			decalage(n);
+		}
+		else {
+			reduire();
+		}
+
 }
 
 void Automate::decalage(Etat *etat)

@@ -15,7 +15,7 @@ class Automate
 {
     public:
         Automate();
-        void lecture(const char* filename);
+        void lecture(char* filename);
         void analyser();
         void decalage(Etat* etat);
         void reduire();

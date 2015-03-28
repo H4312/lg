@@ -38,6 +38,7 @@ private:
     bool cursorNext();
     string readSymbole();
 
+    Symbole *sonder();
 };
 
 #endif // LEXER_H

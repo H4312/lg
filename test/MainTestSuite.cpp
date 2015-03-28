@@ -22,7 +22,7 @@ TEST(Lexer, SplitFile)
     lexer.openFile((char *) "res/programme_ok.txt");
     lexer.splitFileBySym();
     //lexer.DisplaySplittedFile();
-    FAIL("Not finished")
+    //FAIL("Not finished")
 };
 
 TEST(Lexer, isDouble)

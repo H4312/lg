@@ -98,6 +98,11 @@ Symbole *Lexer::readNext() {
     return getSymbole(splittedFile->at(current_symbole++));
 }
 
+Symbole *Lexer::sonder() {
+    if(current_symbole >= splittedFile->size()) return 0;
+    return getSymbole(splittedFile->at(current_symbole));
+}
+
 
 void Lexer::DisplaySplittedFile() {
     for(auto& elem : *this->splittedFile) {

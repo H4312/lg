@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <string.h>
 #include <strings.h>
+#include <iostream>
 
 TEST_GROUP(Lexer) {
 };
@@ -88,6 +89,25 @@ TEST(Lexer, readNext) {
     delete sym;
     CHECK((sym = lexer.readNext())->getType() == Symbole::cons);
     delete sym;
+
+}
+
+TEST_GROUP(Symbole) {
+};
+
+TEST(Symbole, afficher) {
+    Symbole s(Symbole::id);
+    s.setName("id");
+    Symbole s1(Symbole::aff);
+    Symbole s2(Symbole::val);
+    s2.setValue(2.0);
+    Symbole s3(Symbole::pv);
+    Symbole s4(Symbole::I);
+    s4.ajouterFils(&s);
+    s4.ajouterFils(&s1);
+    s4.ajouterFils(&s2);
+    s4.ajouterFils(&s3);
+    CHECK_EQUAL("id:= 2.000000;\n", s4.toString());
 
 }
 

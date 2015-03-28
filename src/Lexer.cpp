@@ -134,8 +134,10 @@ Symbole *Lexer::getSymbole(string str) {
         sym = new Symbole(Symbole::divi);
     } else if(isOnlyDouble(str.c_str())) {
         sym = new Symbole(Symbole::val);
+        sym->setValue(stod(str));
     } else if(isIdentifier(str)) {
         sym = new Symbole(Symbole::id);
+        sym->setName(str);
     }
 
     return sym;

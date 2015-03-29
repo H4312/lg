@@ -49,7 +49,8 @@ void Symbole::setValue(double value)
     m_value = value ;
 }
 
-void Symbole::ConstruireTableSymbole(TableSymbole &table){
+void Symbole::ConstruireTableSymbole(TableSymbole &table)
+{
 	TYPE type = this->getType();
 	list<Symbole*> fils = this->getFils() ;
 
@@ -175,7 +176,76 @@ void Symbole::ConstruireDeclarationConst(TableSymbole &table){
 	}
 }
 
-double Symbole::eval()
+void Symbole::exec(TableSymbole* table)
+{
+	TYPE type = this->getType();
+	list<Symbole*> fils = this->getFils() ;
+
+	switch(type)
+	{
+		case(P) :
+			for (list<Symbole*>::iterator it=fils.begin(); it != fils.end(); ++it)
+			{
+				(*it)->exec(table);
+			}
+			break;
+		case(BI) :
+			for (list<Symbole*>::iterator it=fils.begin(); it != fils.end(); ++it)
+			{
+				(*it)->exec(table);
+			}
+			break;
+		case(BD) :
+			for (list<Symbole*>::iterator it=fils.begin(); it != fils.end(); ++it)
+			{
+				(*it)->ConstruireTableSymbole(*table);
+			}
+			break;
+		case(I) : 
+			{
+				list<Symbole*>::iterator it=fils.begin();
+				TYPE typeFils = (*it)->getType();
+				switch(typeFils)
+				{
+					case(ecrire) :
+					{
+						cout << "Resultat = " << (*(--fils.end()))->eval(table) << endl ;
+						return;
+					}
+					case(lire) : 
+					{
+						double entreeClavier;
+						cin >> entreeClavier;
+						string nomLire = (*(++fils.begin()))->getNom();
+						Declaration* declarationLire = table->findById(nomLire) ;
+						if(declarationLire != 0)
+						{
+							declarationLire->setVal(entreeClavier);
+						}
+						// TODO mieux traiter l'erreur
+						return;
+					}
+					case(id) : 
+					{
+						string nomAff = (*it)->getNom();
+						Declaration* declarationAff = table->findById(nomAff) ;
+						if(declarationAff != 0)
+						{
+							declarationAff->setVal((*(--fils.end()))->eval(table));
+							return;
+						}
+					}
+					default :
+						break;
+				}
+			}
+		default :
+			break;
+	}
+
+}
+
+double Symbole::eval(TableSymbole* table)
 {
 	list<Symbole*> fils = this->getFils();
 	
@@ -193,9 +263,9 @@ double Symbole::eval()
 				switch((*operateur)->getType())
 				{
 					case(pl) :
-						return ((*itDebut)->eval()+(*itFin)->eval());
+						return ((*itDebut)->eval(table)+(*itFin)->eval(table));
 					case(mn) :
-						return (*itDebut)->eval()-(*itFin)->eval();
+						return (*itDebut)->eval(table)-(*itFin)->eval(table);
 					default : 
 						break;
 				}
@@ -207,17 +277,17 @@ double Symbole::eval()
 				switch((*operateur)->getType())
 				{
 					case(mul) :
-						return ((*itDebut)->eval()*(*itFin)->eval());
+						return ((*itDebut)->eval(table)*(*itFin)->eval(table));
 						break;
 					case(divi) :
-						return ((*itDebut)->eval()/(*itFin)->eval());
+						return ((*itDebut)->eval(table)/(*itFin)->eval(table));
 					default : 
 						break;
 				}
 			}
 			// Si le milieu est O (ie on a des parenthèses), il faut évaluer ses fils
 			case(O) :
-				return (*itMilieu)->eval();
+				return (*itMilieu)->eval(table);
 			default :
 				break;
 		}
@@ -229,16 +299,30 @@ double Symbole::eval()
 		switch((*itDebut)->getType())
 		{
 			case(T) :
-				return (*itDebut)->eval();
 			case(F) :
-				return (*itDebut)->eval();
 			case(val) :
-				return (*itDebut)->getValue();
-			// TODO case(id)
+			case(id) : {
+				return (*itDebut)->eval(table);
+			}
 			default :
 				break;
 		}
-		
+	}
+	else if(fils.size() == 0)
+	{
+		switch(getType()) 
+		{
+			case(val) :
+				return getValue();
+			case(id) : {
+				string nom = getNom() ;
+				Declaration* declaration = table->findById(nom) ;
+				return declaration->getVal();
+			}
+			default :
+				break;
+		}
+
 	}
 
 }

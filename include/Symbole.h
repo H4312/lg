@@ -21,12 +21,14 @@ class Symbole
         void ConstruireDeclarationVar(TableSymbole &table);
         void ConstruireDeclarationConst(TableSymbole &table);
        
+        void exec(TableSymbole *table);
+
         list<Symbole*> getFils() ;
         string getNom();
         void setNom(string id);
         double getValue();
         void setValue(double value);
-        double eval();
+        double eval(TableSymbole *table);
     protected:
     private:
         TYPE m_type;

@@ -1,4 +1,4 @@
- #include <iostream>
+#include <iostream>
 #include "Automate.h"
 #include "Symbole.h"
 #include "TableSymbole.h"
@@ -13,7 +13,10 @@ int main(int argc, char** argv)
 	Symbole* p = new Symbole(P);
 	
 	Symbole* bi = new Symbole(BI);
+	Symbole* bi2 = new Symbole(BI);
 	Symbole* i = new Symbole(I);
+	Symbole* i2 = new Symbole(I);
+	Symbole* i3 = new Symbole(I);
 	Symbole* o = new Symbole(O);
 	Symbole* o2 = new Symbole(O);
 	Symbole* o3 = new Symbole(O);
@@ -26,6 +29,7 @@ int main(int argc, char** argv)
 	Symbole* opm2 = new Symbole(opM);
 	Symbole* multi = new Symbole(mul);
 	Symbole* multi2 = new Symbole(mul);
+	Symbole* affect = new Symbole(aff);
 	Symbole* t = new Symbole(T);
 	Symbole* t2 = new Symbole(T);
 	Symbole* t3 = new Symbole(T);
@@ -36,7 +40,44 @@ int main(int argc, char** argv)
 	Symbole* f3 = new Symbole(F);
 	Symbole* f4 = new Symbole(F);
 	Symbole* f5 = new Symbole(F);
-	//Symbole* ec = new Symbole(ecrire);
+	Symbole* ec = new Symbole(ecrire);
+	Symbole* li = new Symbole(lire);
+
+
+	Symbole* cons_ = new Symbole(cons);
+	Symbole* c = new Symbole(C);
+	Symbole* id_2 = new Symbole(id, "y");
+	Symbole* id_3 = new Symbole(id, "new");
+	Symbole* val_ = new Symbole(val);
+	double valeur(5);
+	val_->setValue(valeur);
+
+	Symbole* bd = new Symbole(BD);
+	Symbole* bd1 = new Symbole(BD);
+	Symbole* bd2 = new Symbole(BD);
+	Symbole* bd3 = new Symbole(BD);
+	Symbole* d1 = new Symbole(D);
+	Symbole* d2 = new Symbole(D);
+	Symbole* var_ = new Symbole(var);
+	Symbole* l = new Symbole(L);
+	Symbole* l2 = new Symbole(L);
+	Symbole* id_ = new Symbole(id, "x");
+
+	p->ajouterFils(bd);
+	bd->ajouterFils(d1);
+	d1->ajouterFils(var_);
+	d1->ajouterFils(l);
+	l->ajouterFils(l2);
+	l->ajouterFils(id_);
+
+
+	bd->ajouterFils(bd1);
+	bd1->ajouterFils(d2);
+	d2->ajouterFils(cons_);
+	d2->ajouterFils(c);
+	c->ajouterFils(id_2);
+	c->ajouterFils(val_);
+	
 
 	Symbole* val1 = new Symbole(val);
 	double valeur1(14);
@@ -57,15 +98,24 @@ int main(int argc, char** argv)
 	p->ajouterFils(bi);
 	
 	bi->ajouterFils(i);
-	
+	bi->ajouterFils(bi2);
+	i->ajouterFils(ec);
 	i->ajouterFils(o);
 	o->ajouterFils(o2);
 	o->ajouterFils(opa);
 	o->ajouterFils(t);
 
+	bi2->ajouterFils(i2);
+	i2->ajouterFils(id_);
+	i2->ajouterFils(affect);
+	i2->ajouterFils(val2);
+	/*i2->ajouterFils(li);
+	i2->ajouterFils(id_);*/
+
+
 	o2->ajouterFils(t2);
 	t2->ajouterFils(f);
-	f->ajouterFils(val1);
+	f->ajouterFils(id_2);
 
 	t->ajouterFils(f2);
 	f2->ajouterFils(pO);
@@ -113,43 +163,20 @@ int main(int argc, char** argv)
 	opm2->ajouterFils(multi2);
 
 
-	Symbole* bd = new Symbole(BD);
-	Symbole* bd1 = new Symbole(BD);
-	Symbole* bd2 = new Symbole(BD);
-	Symbole* bd3 = new Symbole(BD);
-	Symbole* d1 = new Symbole(D);
-	Symbole* d2 = new Symbole(D);
-	Symbole* var_ = new Symbole(var);
-	Symbole* l = new Symbole(L);
-	Symbole* l2 = new Symbole(L);
-	Symbole* id_ = new Symbole(id, "x");
-
-	p->ajouterFils(bd);
-	bd->ajouterFils(d1);
-	d1->ajouterFils(var_);
-	d1->ajouterFils(l);
-	l->ajouterFils(l2);
-	l->ajouterFils(id_);
-
-	Symbole* cons_ = new Symbole(cons);
-	Symbole* c = new Symbole(C);
-	Symbole* id_2 = new Symbole(id, "y");
-	Symbole* val_ = new Symbole(val);
-	double valeur(5);
-	val_->setValue(valeur);
-
-	bd->ajouterFils(bd1);
-	bd1->ajouterFils(d2);
-	d2->ajouterFils(cons_);
-	d2->ajouterFils(c);
-	c->ajouterFils(id_2);
-	c->ajouterFils(val_);
 	
 	TableSymbole table;
+	/*
 	p->ConstruireTableSymbole(table);
-	//table.afficherTable();
+	table.afficherTable();
+	cout << "Et la reponse eeeeest : " << o->eval(&table) << endl; 
+	*/
+
+	p->exec(&table);//ConstruireTableSymbole(table);
+	table.afficherTable();
+	//
 	
-	cout << "Et la reponse eeeeest : " << o->eval() << endl; 
+	cout << endl << endl << endl;
+
 	
 	//Executeur e;
 	//e->ecrire();

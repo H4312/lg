@@ -104,7 +104,6 @@ void Symbole::ConstruireDeclarationVar(TableSymbole &table){
 			case(id) :
 			{
 				DeclarationVar var(el->getNom());
-				cout << ">>" << el->getNom() << endl ;
 				table.AjouterDeclaration(var);
 				return;
 			}
@@ -180,59 +179,68 @@ double Symbole::eval()
 {
 	list<Symbole*> fils = this->getFils();
 	
-	list<Symbole*>::const_iterator itDebut=fils.begin(); 
-	list<Symbole*>::const_iterator itMilieu=++fils.begin();
-	list<Symbole*>::const_iterator itFin=fils.end(); 
-
-	switch((*itMilieu)->getType())
+	// On a soit 1 fils soit 3, si on a 3 il faut vérifier l'opération à faire
+	if(fils.size()>1)
 	{
-		case(opA) :
+		list<Symbole*>::const_iterator itDebut=fils.begin(); 
+		list<Symbole*>::const_iterator itMilieu=++fils.begin();
+		list<Symbole*>::const_iterator itFin=--fils.end(); 
+		switch((*itMilieu)->getType())
 		{
-			cout << "ca rentre dans le opA OKLM" << endl;
-			list<Symbole*>::const_iterator operateur=(*itMilieu)->getFils().begin(); 
-			
-			switch((*operateur)->getType())
+			case(opA) :
 			{
-				case(pl) :
-					cout << "ca rentre dans pl OKLM" << endl;
-					(*itDebut)->eval()+(*(--itFin))->eval();
-					break;
-				case(mn) :
-					cout << "ca rentre dans mn OKLM" << endl;
-					(*itDebut)->eval()-(*(--itFin))->eval();
-					break;
-				default : 
-					break ;
+				list<Symbole*>::const_iterator operateur=(*itMilieu)->getFils().begin(); 
+				switch((*operateur)->getType())
+				{
+					case(pl) :
+						return ((*itDebut)->eval()+(*itFin)->eval());
+					case(mn) :
+						return (*itDebut)->eval()-(*itFin)->eval();
+					default : 
+						break;
+				}
 			}
-		}
 			break;
-		case(opM) :
+			case(opM) :
+			{
+				list<Symbole*>::const_iterator operateur=(*itMilieu)->getFils().begin(); 
+				switch((*operateur)->getType())
+				{
+					case(mul) :
+						return ((*itDebut)->eval()*(*itFin)->eval());
+						break;
+					case(divi) :
+						return ((*itDebut)->eval()/(*itFin)->eval());
+					default : 
+						break;
+				}
+			}
+			// Si le milieu est O (ie on a des parenthèses), il faut évaluer ses fils
+			case(O) :
+				return (*itMilieu)->eval();
+			default :
+				break;
+		}
+	}
+	// Si on qu'un seul fils on parcours les fils jusqu'à récupérer la valeur
+	else if(fils.size() == 1)
+	{
+		list<Symbole*>::const_iterator itDebut=fils.begin(); 
+		switch((*itDebut)->getType())
 		{
-			cout << "ca rentre dans le opM OKLM" << endl;
-			list<Symbole*>::const_iterator operateur=(*itMilieu)->getFils().begin(); 
-			
-			//cout << (*operateur)->getType() << endl;
-			switch((*operateur)->getType())
-			{
-				case(mul) :
-					cout << "ca rentre dans mul OKLM" << endl;
-					(*itDebut)->eval()*(*(--itFin))->eval();
-					break;
-				case(divi) :
-					(*itDebut)->eval()/(*(--itFin))->eval();
-					break;
-				default : 
-					break ;
-			}
+			case(T) :
+				return (*itDebut)->eval();
+			case(F) :
+				return (*itDebut)->eval();
+			case(val) :
+				return (*itDebut)->getValue();
+			// TODO case(id)
+			default :
+				break;
 		}
-			break;
-
+		
 	}
 
-	while ((*itMilieu)->getType() == 16 || (*itMilieu)->getType() == 20)
-	{
-		eval();
-	} 
 }
 
 

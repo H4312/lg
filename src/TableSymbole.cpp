@@ -32,14 +32,14 @@ void TableSymbole::afficherTable()
 	}
 }
 
-Declaration TableSymbole::findById(string id)
+Declaration* TableSymbole::findById(string id)
 {
-	for(auto el : declarations) 
+	for (list<Declaration>::iterator it=declarations.begin(); it != declarations.end(); ++it)
 	{
-		if(el.getNom().compare(id) == 0)
+		if((*it).getNom().compare(id) == 0)
 		{
-			return el;
+			return &(*it); 
 		}
 	}
-	//return nullptr;
+	return nullptr;
 }

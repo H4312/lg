@@ -20,7 +20,7 @@ public:
    bool AjouterDeclaration(Declaration declaration);
    std::list<Declaration> declarations;
    void afficherTable();
-   Declaration findById(string id);
+   Declaration* findById(string id);
 
 	protected:
 	private:

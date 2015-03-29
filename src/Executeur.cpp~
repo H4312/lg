@@ -1,0 +1,65 @@
+/***********************************************************************
+ * Module:  Executeur.cpp
+ * Author:  vcaen
+ * Modified: vendredi 20 mars 2015 11:59:54
+ * Purpose: Implementation of the class Executeur
+ ***********************************************************************/
+using namespace std;
+#include <iostream>
+#include "Executeur.h"
+
+Executeur::Executeur(Symbole* s)
+{
+	this->s = s;
+}
+
+////////////////////////////////////////////////////////////////////////
+// Name:       Executeur::ecrire()
+// Purpose:    Implementation of Executeur::ecrire()
+// Return:     void
+////////////////////////////////////////////////////////////////////////
+
+void Executeur::ecrire(void)
+{
+	list<Symbole*> fils = this->getFils();
+	list<Symbole*>::const_iterator itDebut=fils.begin();
+	list<Symbole*>::const_iterator itFin=fils.end()
+   	if ((*itDebut)->getType == 15) //On veut ecrire qui correspond a 15
+   	{
+		cout<<(*(--itFin))->eval()<<endl; //Après un écrire j'ai toujours un O (Opération) d'après la grammaire (dont j'écris le résultat de la méthode eval de l'objet O
+   	}
+}
+
+////////////////////////////////////////////////////////////////////////
+// Name:       Executeur::lire()
+// Purpose:    Implementation of Executeur::lire()
+// Return:     int
+////////////////////////////////////////////////////////////////////////
+
+int Executeur::lire(void)
+{
+	/*if (s->getType == lire)
+	{
+	   double tmp; 
+	   cin>>tmp; //Je récupère ce que le mec a tapé au clavier 
+	   table.findById(s->getFils[0].getNom()).setValue(tmp); //Je mets ce que le mec a tapé dans l'attribut value de l'objet Declaration de TableSymbole dont l'id est 
+															//égal au nom du symbole qui succède lire
+
+	}*/
+}
+
+////////////////////////////////////////////////////////////////////////
+// Name:       Executeur::affecter()
+// Purpose:    Implementation of Executeur::affecter()
+// Return:     int
+////////////////////////////////////////////////////////////////////////
+
+int Executeur::affecter(void)
+{
+   // TODO : implement
+}
+
+Executeur::~Executeur()
+{
+	
+}

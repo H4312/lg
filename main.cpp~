@@ -31,7 +31,7 @@ int main(int argc, char** argv)
 	Symbole* t4 = new Symbole(T);
 	Symbole* f = new Symbole(F);
 	Symbole* f2 = new Symbole(F);
-	//Symbole* ec = new Symbole(ecrire);
+	Symbole* ec = new Symbole(ecrire);
 
 	Symbole* bd = new Symbole(BD);
 	Symbole* bd1 = new Symbole(BD);
@@ -48,7 +48,7 @@ int main(int argc, char** argv)
 	p->ajouterFils(bi);
 	
 	bi->ajouterFils(i);
-	//i->ajouterFils(ec);
+	i->ajouterFils(ec);
 	i->ajouterFils(o);
 	o->ajouterFils(o2);
 	o->ajouterFils(opa);
@@ -92,10 +92,10 @@ int main(int argc, char** argv)
 	TableSymbole table;
 	p->ConstruireTableSymbole(table);
 	//table.afficherTable();
-	o->eval();
+	//o->eval();
 	
-	//Executeur e;
-	//e->ecrire();
+	Executeur e;
+	e->ecrire();
 	
     return 0;
 }

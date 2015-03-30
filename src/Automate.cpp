@@ -25,53 +25,56 @@ void Automate::lecture(char* filename)
 	m_transitions = initMap();
 	lexer.openFile(filename);
 	lexer.splitFileBySym();
-	analyser();
 }
 
-void Automate::analyser()
-{
-	while(1) {
-		isRead=false;
-		if (currentSym == NULL)
-		{
+Symbole * Automate::analyser() {
+	int err = 0;
+	bool end = false;
+
+	while (1) {
+		isRead = false;
+		if (currentSym == NULL) {
 			currentSym = lexer.sonder();
 			isRead = true;
-			if (currentSym==NULL)
-			{
+			if (currentSym == NULL) {
 				currentSym = new Symbole(Symbole::defaut);
+				end = true;
 			}
 		}
-		cout<<"Symbole courrent : "<<currentSym->toString1()<<endl;
+		cout << "Symbole courrent : " << currentSym->toString1() << endl;
 		map<Symbole::TYPE, Etat *> temp = m_transitions.find(m_etats.top())->second;
 
 
 		if (temp.find(currentSym->getType()) != temp.end()) {
 			cout << "Decalage de " << m_etats.top()->getId();
 			Etat *n = temp.find(currentSym->getType())->second;
-			cout <<" vers l'etat "<<n->getId()<<endl;
+			cout << " vers l'etat " << n->getId() << endl;
 			decalage(n);
 		}
+
 		else {
-			bool end = false;
-			if (currentSym->getType() == Symbole::defaut)
-				end = true;
 			bool correct = reduire();
-
-			if(!correct)
-			{
-				return;
+			if (!correct) {
+				return 0;
 			}
 
-			if (currentSym->getType()==Symbole::P && end)
-			{
-				cout<<endl<<"Analyse terminée - Syntaxe correcte"<<endl;
-				return;
+			if (currentSym->getType() == Symbole::P) {
+				if (end) {
+					if (err == 0) cout << endl << "Analyse terminée - Syntaxe correcte" << endl;
+					if (err > 0) cout << endl << "Analyse terminée - " << err - 1 << " Erreurs" << endl;
+					programme = currentSym;
+					return programme;
+				}
+				else {
+					cout << "Erreur, Symbole inattendu " << endl;
+					return 0;
+				}
 			}
-
 		}
 	}
-
 }
+
+
 
 void Automate::decalage(Etat *etat)
 {
@@ -102,9 +105,10 @@ bool Automate::reduire()
 		cout<<endl;
 		return true;
 	}
-	else
-	{
-		cout<<endl<<"Syntaxe incorrect !!!"<<endl;
+	else {
+		cout << endl << "Symbole inattendu, depilage " << m_etats.top()->getId() << endl;
+		m_etats.pop();
+		m_symboles.pop();
 		return false;
 	}
 
@@ -392,11 +396,12 @@ map<Etat*, map<TYPE, Etat*> > Automate::initMap() {
 
 	transitions[26].insert(make_pair(Symbole::val, etats.at(37)));
 
-	transitions[26].insert(make_pair(Symbole::T, etats.at(38)));
-	transitions[26].insert(make_pair(Symbole::F, etats.at(18)));
-	transitions[26].insert(make_pair(Symbole::id, etats.at(19)));
-	transitions[26].insert(make_pair(Symbole::val, etats.at(20)));
-	transitions[26].insert(make_pair(Symbole::po, etats.at(21)));
+	transitions[27].insert(make_pair(Symbole::T, etats.at(38)));
+	transitions[27].insert(make_pair(Symbole::F, etats.at(18)));
+	transitions[27].insert(make_pair(Symbole::id, etats.at(19)));
+	transitions[27].insert(make_pair(Symbole::val, etats.at(20)));
+	transitions[27].insert(make_pair(Symbole::po, etats.at(21)));
+
 
 	// transitions[28] reste vide
 	// transitions[29] reste vide

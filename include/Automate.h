@@ -16,7 +16,7 @@ class Automate
     public:
         Automate();
         void lecture(char* filename);
-        void analyser();
+        Symbole * analyser();
         void decalage(Etat* etat);
         bool reduire();
 		map<Etat*, map<Symbole::TYPE, Etat*> > initMap();
@@ -26,6 +26,7 @@ class Automate
         Lexer lexer;
         map<Etat*, map<Symbole::TYPE , Etat*> > m_transitions;
         Symbole* currentSym=0;
+        Symbole* programme=0;
         stack<Etat*> m_etats;
         stack<Symbole*> m_symboles;
         bool isRead=false;

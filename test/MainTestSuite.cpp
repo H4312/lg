@@ -54,6 +54,7 @@ TEST(Lexer, SplitFile)
     CHECK_EQUAL("lire", v->at(29));
     CHECK_EQUAL("x", v->at(30));
     CHECK_EQUAL(";", v->at(31));
+    CHECK_EQUAL("lire", v->at(32));
 
 
     //lexer.DisplaySplittedFile();
@@ -120,9 +121,9 @@ TEST(Lexer, readNext) {
     delete sym;
     CHECK((sym = lexer.readNext())->getType() == Symbole::id);
     delete sym;
-    CHECK((sym = lexer.readNext())->getType() == Symbole::pv);
+    CHECK((sym = lexer.readNext())->getType() == Symbole::v);
     delete sym;
-    CHECK((sym = lexer.readNext())->getType() == Symbole::cons);
+    CHECK((sym = lexer.readNext())->getType() == Symbole::id);
     delete sym;
 
 }
@@ -153,12 +154,62 @@ TEST(Symbole, afficher) {
     s2.setValue(2.0);
     Symbole s3(Symbole::pv);
     Symbole s4(Symbole::I);
-    s4.ajouterFils(&s);
-    s4.ajouterFils(&s1);
-    s4.ajouterFils(&s2);
     s4.ajouterFils(&s3);
+    s4.ajouterFils(&s2);
+    s4.ajouterFils(&s1);
+    s4.ajouterFils(&s);
     CHECK_EQUAL("id:= 2.000000;\n", s4.toString());
+    Symbole r(Symbole::id);
+    r.setName("a");
+    Symbole r2(Symbole::v);
+    Symbole r3(Symbole::id);
+    r3.setName("b");
+    Symbole r4(Symbole::v);
+    Symbole l2(Symbole::L);
+    Symbole l1(Symbole::L);
+    Symbole d(Symbole::D);
+    Symbole var(Symbole::var);
+    d.ajouterFils(&l2);
+    d.ajouterFils(&var);
+    l2.ajouterFils(&r);
+    l2.ajouterFils(&r4);
+    l2.ajouterFils(&l1);
+    l1.ajouterFils(&r3);
+    CHECK_EQUAL("var b;\nvar a", d.toString());
+    Symbole C(Symbole::C);
+    Symbole v(Symbole::v);
+    Symbole id(Symbole::id);
+    id.setName("c");
+    Symbole eq(Symbole::eq);
+    Symbole val(Symbole::val);
+    val.setValue(42);
+    Symbole C2(Symbole::C);
+    Symbole id2(Symbole::id);
+    id2.setName("d");
+    Symbole eq2(Symbole::eq);
+    Symbole val2(Symbole::val);
+    val2.setValue(43);
+    C2.ajouterFils(&val2);
+    C2.ajouterFils(&eq2);
+    C2.ajouterFils(&id2);
+    C.ajouterFils(&val);
+    C.ajouterFils(&eq);
+    C.ajouterFils(&id);
+    C.ajouterFils(&v);
+    C.ajouterFils(&C2);
+    CHECK_EQUAL("const d=43.000000;\n"
+                        "const c=42.000000", C.toString());
 
+}
+
+
+TEST_GROUP(Fonctionnel){};
+TEST(Fonctionnel, un)  {
+    Automate automate;
+    //automate.lecture(argv[argc - 1]);
+    automate.lecture((char *) "res/programme_ok.txt");
+    Symbole* p = automate.analyser();
+    cout << p->toString();
 }
 
 int main(int ac, char** av)

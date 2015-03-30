@@ -9,6 +9,10 @@ Symbole::Symbole(Symbole::TYPE unType){
     m_fils = new list<Symbole*>;
 }
 
+Symbole::~Symbole() {
+	delete m_fils;
+}
+
 Symbole::TYPE Symbole::getType()
 {
     return m_type;
@@ -323,20 +327,17 @@ double Symbole::eval(TableSymbole* table)
 }
 
 
-Symbole::~Symbole() {
-    delete m_fils;
-
-}
 
 string Symbole::toString() {
-
+	string result = "";
+	list<Symbole *> *fils = this->getFils();
     switch(m_type)
     {
         case pv : return ";\n";
         case val : return to_string(m_value);
-        case cons : return "cons ";
-        case var : return "var ";
-        case v : return ", ";
+        case cons : return "";
+        case var : return "";
+        case v : return "";
         case id : return m_nom;
         case eq : return "=";
         case ecrire : return "ecrire ";
@@ -348,12 +349,40 @@ string Symbole::toString() {
         case mn : return "-";
         case mul : return "*";
         case divi : return "/";
+		case C :
+			result = "";
+			fils = this->getFils();
+			for(Symbole *s : *fils) {
+
+				if(s->getType()==id){
+					result = result +"const " + s->toString()+ "";
+				} else if(s->getType()==v) {
+					result += ";\n";
+				} else  {
+					result = result + s->toString();
+				}
+			}
+			return result;
+		case L :
+			result = "";
+			fils = this->getFils();
+			for(Symbole *s : *fils) {
+
+				if(s->getType()==id){
+					result += "var " + s->toString();
+				} else if(s->getType()==v) {
+					result += ";\n";
+				} else {
+					result += s->toString();
+				}
+			}
+			return result;
         default:
             string result = "";
-            list<Symbole *> *fils = this->getFils();
+            fils = this->getFils();
             for(Symbole *s : *fils) {
 
-                result = s->toString() + result;
+                result = result + s->toString();
             }
             return result;
     }

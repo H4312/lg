@@ -30,6 +30,7 @@ class Automate
         stack<Etat*> m_etats;
         stack<Symbole*> m_symboles;
         bool isRead=false;
+        int err=0;
 };
 
 

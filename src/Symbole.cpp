@@ -392,7 +392,7 @@ string Symbole::toString1() {
 
     switch(m_type)
     {
-        case pv : return ";\n";
+        case pv : return ";";
         case val : return "val : " +to_string(m_value);
         case cons : return "cons ";
         case var : return "var ";

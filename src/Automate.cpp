@@ -28,7 +28,6 @@ void Automate::lecture(char* filename)
 }
 
 Symbole * Automate::analyser() {
-	int err = 0;
 	bool end = false;
 
 	while (1) {
@@ -41,27 +40,31 @@ Symbole * Automate::analyser() {
 				end = true;
 			}
 		}
-		cout << "Symbole courrent : " << currentSym->toString1() << endl;
+		//cout << "Symbole courrant : " << currentSym->toString1() << endl;
 		map<Symbole::TYPE, Etat *> temp = m_transitions.find(m_etats.top())->second;
 
 
 		if (temp.find(currentSym->getType()) != temp.end()) {
-			cout << "Decalage de " << m_etats.top()->getId();
+			//cout << "Decalage de " << m_etats.top()->getId();
 			Etat *n = temp.find(currentSym->getType())->second;
-			cout << " vers l'etat " << n->getId() << endl;
+			//cout << " vers l'etat " << n->getId() << endl;
 			decalage(n);
 		}
 
 		else {
 			bool correct = reduire();
 			if (!correct) {
-				return 0;
+				for(map<Symbole::TYPE, Etat *>::iterator p = temp.begin(); p != temp.end(); p++)
+				{
+					cout<<Symbole(temp.begin()->first).toString1()<<" ";
+				}
+				cout<<" attendu"<<endl;
 			}
 
 			if (currentSym->getType() == Symbole::P) {
 				if (end) {
 					if (err == 0) cout << endl << "Analyse terminée - Syntaxe correcte" << endl;
-					if (err > 0) cout << endl << "Analyse terminée - " << err - 1 << " Erreurs" << endl;
+					if (err > 0) cout << endl << "Analyse terminée - " << err << " Erreurs" << endl;
 					programme = currentSym;
 					return programme;
 				}
@@ -93,22 +96,26 @@ bool Automate::reduire()
 	{
 		Etat* etat = m_etats.top();
 		Symbole* s = new Symbole(etat->getGauche());
-		cout<<"Reduction dans l'etat "<< etat->getId()<<" dans " << s->toString1()<<" de ";
+		//cout<<"Reduction dans l'etat "<< etat->getId()<<" dans " << s->toString1()<<" de ";
 		for(int i = 0 ; i < etat->getNbr() ; i++ )
 		{
 			s->ajouterFils(m_symboles.top());
 			m_etats.pop();
-			cout<<m_symboles.top()->toString1()<<" ";
+			//cout<<m_symboles.top()->toString1()<<" ";
 			m_symboles.pop();
 		}
 		currentSym = s;
-		cout<<endl;
 		return true;
 	}
 	else {
-		cout << endl << "Symbole inattendu, depilage " << m_etats.top()->getId() << endl;
-		m_etats.pop();
-		m_symboles.pop();
+		//cout << endl <<"Symbole inattendu, depilage de " << m_etats.top()->getId() << endl;
+		while (!m_symboles.empty())
+		{
+			//cout<<"Etat : "<< m_etats.top()->getId()<<" Symbole : "<<m_symboles.top()->toString1();
+			m_symboles.pop();
+			m_etats.pop();
+		}
+		err++;
 		return false;
 	}
 

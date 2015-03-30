@@ -29,6 +29,7 @@ class Symbole
         list<Symbole*> *getFils() ;
         string getNom();
         void setNom(string id);
+        void setName(string id) { setNom(id);}
         double getValue();
         void setValue(double value);
         double eval(TableSymbole *table);

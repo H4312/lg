@@ -21,7 +21,7 @@ list<Symbole*>* Symbole::getFils()
 
 void Symbole::ajouterFils(Symbole* symb)
 {
-    m_fils->push_back(symb);
+    m_fils->push_front(symb);
 }
 
 void Symbole::setNom(string id)

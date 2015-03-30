@@ -29,7 +29,7 @@ void Automate::lecture(char* filename)
 
 Symbole * Automate::analyser() {
 	bool end = false;
-
+	err = 0;
 	while (1) {
 		isRead = false;
 		if (currentSym == NULL) {
@@ -56,7 +56,7 @@ Symbole * Automate::analyser() {
 			if (!correct) {
 				for(map<Symbole::TYPE, Etat *>::iterator p = temp.begin(); p != temp.end(); p++)
 				{
-					cout<<Symbole(temp.begin()->first).toString1()<<" ";
+					cout<<Symbole(p->first).toString1()<<" ";
 				}
 				cout<<" attendu"<<endl;
 			}
@@ -70,7 +70,7 @@ Symbole * Automate::analyser() {
 				}
 				else {
 					cout << "Erreur, Symbole inattendu " << endl;
-					return 0;
+					lexer.readNext();
 				}
 			}
 		}
@@ -108,13 +108,14 @@ bool Automate::reduire()
 		return true;
 	}
 	else {
-		//cout << endl <<"Symbole inattendu, depilage de " << m_etats.top()->getId() << endl;
-		while (!m_symboles.empty())
+		cout << endl <<"Symbole inattendu, depilage de " << m_etats.top()->getId() << endl;
+		while (m_symboles.top()->getType() != Symbole::BD && m_symboles.top()->getType() != Symbole::BI && !m_symboles.empty())
 		{
 			//cout<<"Etat : "<< m_etats.top()->getId()<<" Symbole : "<<m_symboles.top()->toString1();
 			m_symboles.pop();
 			m_etats.pop();
 		}
+		lexer.readNext();
 		err++;
 		return false;
 	}

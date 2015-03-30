@@ -20,6 +20,7 @@ class Symbole
         void ConstruireTableSymbole(TableSymbole &table);
         void ConstruireDeclarationVar(TableSymbole &table);
         void ConstruireDeclarationConst(TableSymbole &table);
+        void afficher() ;
        
         void exec(TableSymbole *table);
 

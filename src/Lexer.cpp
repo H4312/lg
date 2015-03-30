@@ -121,6 +121,10 @@ Symbole *Lexer::getSymbole(string str) {
         sym = new Symbole(Symbole::cons);
     } else if(str == "var") {
         sym = new Symbole(Symbole::var);
+    } else if(str == "ecrire") {
+        sym = new Symbole(Symbole::ecrire);
+    } else if(str == "lire") {
+        sym = new Symbole(Symbole::lire);
     } else if(str == ":=") {
         sym = new Symbole(Symbole::aff);
     } else if(str == "=") {

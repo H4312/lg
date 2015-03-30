@@ -100,6 +100,7 @@ vector<string> * Lexer::splitFileBySym() {
             cerr << "Symbole invalide ligne " << num_line << " position " << num_char << endl;
         }
     }
+    splittedFile->push_back(current);
 
     return splittedFile;
 }

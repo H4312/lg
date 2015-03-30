@@ -43,8 +43,16 @@ void Lexer::splitFileBySym() {
     char c;
     string current;
     bool affsym = false;
+    int num_line = 1;
+    int num_char = 0;
 
     while(this->file.get(c)) {
+        if(c == '\n') {
+            num_line++;
+            num_char = 0;
+        } else {
+            num_char++;
+        }
         if(
                 c == '+' || c == '-' || c == '*'||
                 c == '/' || c == ';' ||
@@ -79,9 +87,11 @@ void Lexer::splitFileBySym() {
             // Debut de reconnaissance d'un symbole d'affectation
             affsym = true;
         }
-        else
+        else if(isalnum(c))
         {
             current += c;
+        } else {
+            cerr << "Symbole invalide ligne " << num_line << " position " << num_char << endl;
         }
     }
 }

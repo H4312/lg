@@ -4,6 +4,7 @@
 #include <string.h>
 #include <strings.h>
 #include <iostream>
+#include <sstream>
 
 TEST_GROUP(Lexer) {
 };
@@ -90,6 +91,21 @@ TEST(Lexer, readNext) {
     CHECK((sym = lexer.readNext())->getType() == Symbole::cons);
     delete sym;
 
+}
+
+TEST(Lexer, fakeChar) {
+    std::stringstream buffer;
+    std::streambuf * old = std::cerr.rdbuf(buffer.rdbuf());
+    Lexer lexer;
+    lexer.openFile((char *) "res/programme_char_faux.txt");
+    lexer.splitFileBySym();
+    string str = "Symbole invalide ligne 3 position 1\n"
+    "Symbole invalide ligne 3 position 3\n"
+    "Symbole invalide ligne 3 position 5\n"
+    "Symbole invalide ligne 4 position 1\n"
+    "Symbole invalide ligne 4 position 2\n"
+    "Symbole invalide ligne 4 position 3\n";
+    CHECK_EQUAL(str, buffer.str());
 }
 
 TEST_GROUP(Symbole) {

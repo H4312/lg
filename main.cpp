@@ -10,6 +10,9 @@ int main(int argc, char** argv)
     Automate automate;
     //automate.lecture(argv[argc - 1]);
     automate.lecture("/home/jeremy/LG/bin/Debug/test.txt");
+    Symbole* p = automate.analyser();
+    TableSymbole *table;
+    p->exec(table);
 
 
     /*

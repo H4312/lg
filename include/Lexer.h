@@ -18,7 +18,7 @@ class Lexer
         bool openFile(char  *filename);
         bool isFileOpen();
         void closeFile();
-        Symbole* readCurrent();
+        Symbole* sonder();
         Symbole* readNext();
     bool moveNext();
     Symbole* getSymbole(string str);
@@ -37,8 +37,6 @@ private:
     vector<string> *splittedFile = new vector<string>;
     bool cursorNext();
     string readSymbole();
-
-    Symbole *sonder();
 };
 
 #endif // LEXER_H

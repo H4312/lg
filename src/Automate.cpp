@@ -13,38 +13,63 @@ Automate::Automate()
     Symbole* s4 = new Symbole(id); ex->push_back(s4);
     Symbole* s5 = new Symbole(pv); ex->push_back(s5);
 */
-    m_transitions = initMap();
 }
 
 Automate::~Automate()
 {
-    //dtor
+
 }
 
 void Automate::lecture(char* filename)
 {
-
-	//analyser();
+	m_transitions = initMap();
+	lexer.openFile(filename);
+	lexer.splitFileBySym();
+	analyser();
 }
 
 void Automate::analyser()
 {
-		if (currentSym == NULL) {
-			currentSym = lexer.readNext();
-			cout<<currentSym->getType()<<endl;
-			if (currentSym == NULL) {
-				return;
+	while(1) {
+		isRead=false;
+		if (currentSym == NULL)
+		{
+			currentSym = lexer.sonder();
+			isRead = true;
+			if (currentSym==NULL)
+			{
+				currentSym = new Symbole(Symbole::defaut);
 			}
 		}
+		cout<<"Symbole courrent : "<<currentSym->toString1()<<endl;
+		map<Symbole::TYPE, Etat *> temp = m_transitions.find(m_etats.top())->second;
 
-		Etat *n = m_transitions.find(m_etats.top())->second.find(currentSym->getType())->second;
 
-		if (n != NULL) {
+		if (temp.find(currentSym->getType()) != temp.end()) {
+			cout << "Decalage de " << m_etats.top()->getId();
+			Etat *n = temp.find(currentSym->getType())->second;
+			cout <<" vers l'etat "<<n->getId()<<endl;
 			decalage(n);
 		}
 		else {
-			reduire();
+			bool end = false;
+			if (currentSym->getType() == Symbole::defaut)
+				end = true;
+			bool correct = reduire();
+
+			if(!correct)
+			{
+				return;
+			}
+
+			if (currentSym->getType()==Symbole::P && end)
+			{
+				cout<<endl<<"Analyse terminée - Syntaxe correcte"<<endl;
+				return;
+			}
+
 		}
+	}
 
 }
 
@@ -52,46 +77,238 @@ void Automate::decalage(Etat *etat)
 {
     m_etats.push(etat);
     m_symboles.push(currentSym);
+	if(isRead)
+	{
+		lexer.readNext();
+	}
     currentSym=NULL;
 }
 
-void Automate::reduire()
+bool Automate::reduire()
 {
-    Etat* etat = m_etats.top();
-    Symbole* s = new Symbole(etat->getGauche());
-    for(int i = 0 ; i < etat->getNbr() ; i++ )
+	if(m_etats.top()->hasReduction())
 	{
-        s->ajouterFils(m_symboles.top());
-        m_etats.pop();
-        m_symboles.pop();
-    }
-    currentSym = s;
+		Etat* etat = m_etats.top();
+		Symbole* s = new Symbole(etat->getGauche());
+		cout<<"Reduction dans l'etat "<< etat->getId()<<" dans " << s->toString1()<<" de ";
+		for(int i = 0 ; i < etat->getNbr() ; i++ )
+		{
+			s->ajouterFils(m_symboles.top());
+			m_etats.pop();
+			cout<<m_symboles.top()->toString1()<<" ";
+			m_symboles.pop();
+		}
+		currentSym = s;
+		cout<<endl;
+		return true;
+	}
+	else
+	{
+		cout<<endl<<"Syntaxe incorrect !!!"<<endl;
+		return false;
+	}
+
 }
 
 map<Etat*, map<TYPE, Etat*> > Automate::initMap() {
 	const int nombreEtats = 43;
 
 	// Map pour les transitions
-	map<Etat*, map<TYPE, Etat*> > m_transitions;
+	map<Etat *, map<TYPE, Etat *> > m_transitions;
 
 	// Initialiser un vector avec 43 pour les etats
 
-	vector<Etat*> etats(nombreEtats, new Etat());
+	vector<Etat *> etats;
+	for (int i = 1 ; i<=nombreEtats ; i++)
+	{
+		Etat* e = new Etat(i);
+		etats.push_back(e);
+	}
+
 
 	// Initialiser tous les états
 	list<TYPE> listeVide;
 
 	etats[0]->setGauche(Symbole::BD);
-	etats[0]->setDroite(listeVide);
+	etats[0]->setListeDroite(listeVide);
+	m_etats.push(etats[0]);
 
 	etats[1]->setGauche(Symbole::BI);
-	etats[1]->setDroite(listeVide);
+	etats[1]->setListeDroite(listeVide);
+	etats[1]->setId(2);
 
-	etats[2]->setGauche(Symbole::P); list<TYPE> droite2; droite2.push_back(Symbole::BD); droite2.push_back(Symbole::BI);
-	etats[2]->setDroite(droite2);
+	etats[2]->setGauche(Symbole::P);
+	list<TYPE> droite2;
+	droite2.push_back(Symbole::BD);
+	droite2.push_back(Symbole::BI);
+	etats[2]->setListeDroite(droite2);
+	etats[2]->setId(3);
+
+	etats[10]->setGauche(Symbole::BD);
+	list<TYPE> droite10;
+	droite10.push_back(Symbole::BD);
+	droite10.push_back(Symbole::D);
+	droite10.push_back(Symbole::pv);
+	etats[10]->setListeDroite(droite10);
+	etats[10]->setId(11);
+
+	etats[11]->setGauche(Symbole::D);
+	list<TYPE> droite11;
+	droite11.push_back(Symbole::var);
+	droite11.push_back(Symbole::L);
+	etats[11]->setListeDroite(droite11);
+	etats[11]->setId(12);
+
+	{etats[12]->setGauche(Symbole::L);
+		list<TYPE> droite;
+		droite.push_back(Symbole::id);
+		etats[12]->setListeDroite(droite);
+		etats[12]->setId(13);}
+
+	{int i = 14;
+		etats[i-1]->setGauche(Symbole::D);
+		list<TYPE> droite;
+		droite.push_back(Symbole::cons);
+		droite.push_back(Symbole::C);
+		etats[i-1]->setListeDroite(droite);
+		etats[i-1]->setId(i);}
+
+	{int i = 16;
+		etats[i-1]->setGauche(Symbole::BI);
+		list<TYPE> droite;
+		droite.push_back(Symbole::BI);
+		droite.push_back(Symbole::I);
+		droite.push_back(Symbole::pv);
+		etats[i-1]->setListeDroite(droite);
+		etats[i-1]->setId(i);}
+
+	{int i = 17;
+		etats[i-1]->setGauche(Symbole::I);
+		list<TYPE> droite;
+		droite.push_back(Symbole::ecrire);
+		droite.push_back(Symbole::O);
+		etats[i-1]->setListeDroite(droite);
+		etats[i-1]->setId(i);}
+
+	{int i = 18;
+		etats[i-1]->setGauche(Symbole::O);
+		list<TYPE> droite;
+		droite.push_back(Symbole::I);
+		etats[i-1]->setListeDroite(droite);
+		etats[i-1]->setId(i);}
+
+	{int i = 19;
+		etats[i-1]->setGauche(Symbole::T);
+		list<TYPE> droite;
+		droite.push_back(Symbole::F);
+		etats[i-1]->setListeDroite(droite);
+		etats[i-1]->setId(i);}
+
+	{int i = 20;
+		etats[i-1]->setGauche(Symbole::F);
+		list<TYPE> droite;
+		droite.push_back(Symbole::id);
+		etats[i-1]->setListeDroite(droite);
+		etats[i-1]->setId(i);}
+
+	{int i = 21;
+		etats[i-1]->setGauche(Symbole::F);
+		list<TYPE> droite;
+		droite.push_back(Symbole::val);
+		etats[i-1]->setListeDroite(droite);
+		etats[i-1]->setId(i);}
+	{int i = 23;
+		etats[i-1]->setGauche(Symbole::I);
+		list<TYPE> droite;
+		droite.push_back(Symbole::lire);
+		droite.push_back(Symbole::id);
+		etats[i-1]->setListeDroite(droite);
+		etats[i-1]->setId(i);}
+	{int i = 29;
+		etats[i-1]->setGauche(Symbole::opA);
+		list<TYPE> droite;
+		droite.push_back(Symbole::pl);
+		etats[i-1]->setListeDroite(droite);
+		etats[i-1]->setId(i);}
+	{int i = 30;
+		etats[i-1]->setGauche(Symbole::opA);
+		list<TYPE> droite;
+		droite.push_back(Symbole::mn);
+		etats[i-1]->setListeDroite(droite);
+		etats[i-1]->setId(i);}
+	{int i = 32;
+		etats[i-1]->setGauche(Symbole::opM);
+		list<TYPE> droite;
+		droite.push_back(Symbole::mul);
+		etats[i-1]->setListeDroite(droite);
+		etats[i-1]->setId(i);}
+	{int i = 33;
+		etats[i-1]->setGauche(Symbole::opM);
+		list<TYPE> droite;
+		droite.push_back(Symbole::divi);
+		etats[i-1]->setListeDroite(droite);
+		etats[i-1]->setId(i);}
+	{int i = 35;
+		etats[i-1]->setGauche(Symbole::I);
+		list<TYPE> droite;
+		droite.push_back(Symbole::id);
+		droite.push_back(Symbole::aff);
+		droite.push_back(Symbole::O);
+		etats[i-1]->setListeDroite(droite);
+		etats[i-1]->setId(i);}
+	{int i = 36;
+		etats[i-1]->setGauche(Symbole::L);
+		list<TYPE> droite;
+		droite.push_back(Symbole::L);
+		droite.push_back(Symbole::v);
+		droite.push_back(Symbole::id);
+		etats[i-1]->setListeDroite(droite);
+		etats[i-1]->setId(i);}
+	{int i = 38;
+		etats[i-1]->setGauche(Symbole::C);
+		list<TYPE> droite;
+		droite.push_back(Symbole::id);
+		droite.push_back(Symbole::eq);
+		droite.push_back(Symbole::val);
+		etats[i-1]->setListeDroite(droite);
+		etats[i-1]->setId(i);}
+	{int i = 39;
+		etats[i-1]->setGauche(Symbole::O);
+		list<TYPE> droite;
+		droite.push_back(Symbole::O);
+		droite.push_back(Symbole::opA);
+		droite.push_back(Symbole::T);
+		etats[i-1]->setListeDroite(droite);
+		etats[i-1]->setId(i);}
+	{int i = 40;
+		etats[i-1]->setGauche(Symbole::T);
+		list<TYPE> droite;
+		droite.push_back(Symbole::T);
+		droite.push_back(Symbole::opM);
+		droite.push_back(Symbole::F);
+		etats[i-1]->setListeDroite(droite);
+		etats[i-1]->setId(i);}
+	{int i = 41;
+		etats[i-1]->setGauche(Symbole::F);
+		list<TYPE> droite;
+		droite.push_back(Symbole::po);
+		droite.push_back(Symbole::O);
+		droite.push_back(Symbole::pf);
+		etats[i-1]->setListeDroite(droite);
+		etats[i-1]->setId(i);}
+	{int i = 43;
+		etats[i-1]->setGauche(Symbole::C);
+		list<TYPE> droite;
+		droite.push_back(Symbole::C);
+		droite.push_back(Symbole::v);
+		droite.push_back(Symbole::id);
+		droite.push_back(Symbole::eq);
+		droite.push_back(Symbole::val);
+		etats[i-1]->setListeDroite(droite);
+		etats[i-1]->setId(i);}
 
 	map<TYPE, Etat*> transitions_initialize;
-	transitions_initialize.insert(make_pair(Symbole::P, etats.at(1)));
+	//transitions_initialize.insert(make_pair(Symbole::P, etats.at(1)));
 
 	// Initialiser un vector avec 43 pour les transitions
 	// et ajouter les transitions correspondantes
@@ -107,7 +324,8 @@ map<Etat*, map<TYPE, Etat*> > Automate::initMap() {
 
 	transitions[2].insert(make_pair(Symbole::ecrire, etats.at(7)));
 	transitions[2].insert(make_pair(Symbole::lire, etats.at(8)));
-	transitions[2].insert(make_pair(Symbole::id, etats.at(10)));
+	transitions[2].insert(make_pair(Symbole::id, etats.at(9)));
+	transitions[2].insert(make_pair(Symbole::I, etats.at(6)));
 
 	transitions[3].insert(make_pair(Symbole::pv, etats.at(10)));
 
@@ -218,9 +436,9 @@ map<Etat*, map<TYPE, Etat*> > Automate::initMap() {
 	// transitions[42] reste vide
 
 	// Ajoutons-les dans m_transitions
-	for(int i = 0; i < m_transitions.size(); i++) {
-		m_transitions.insert(make_pair(etats[i], transitions[i]));
 
+	for(int i = 0; i < transitions.size(); i++) {
+		m_transitions.insert(make_pair(etats[i], transitions[i]));
 	}
 
 	return m_transitions;

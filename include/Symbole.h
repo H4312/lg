@@ -10,7 +10,7 @@ class Symbole
     public:
 
     enum TYPE
-    {P, BD, BI, D, pv, E, I, val, L, cons, var, C, v, id, eq, ecrire, O, lire, aff, opA, T, opM, F, po, pf, pl, mn, mul, divi};
+    {P, BD, BI, D, pv, E, I, val, L, cons, var, C, v, id, eq, ecrire, O, lire, aff, opA, T, opM, F, po, pf, pl, mn, mul, divi, defaut};
     Symbole(TYPE unType);
     virtual ~Symbole();
     TYPE getType();
@@ -21,6 +21,7 @@ class Symbole
     string get_nom() const {return m_nom; }
     double get_value() const {return m_value; }
     string toString();
+    string toString1();
 
 protected:
     private:

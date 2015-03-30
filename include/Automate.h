@@ -18,17 +18,17 @@ class Automate
         void lecture(char* filename);
         void analyser();
         void decalage(Etat* etat);
-        void reduire();
+        bool reduire();
 		map<Etat*, map<Symbole::TYPE, Etat*> > initMap();
         virtual ~Automate();
     protected:
     private:
         Lexer lexer;
         map<Etat*, map<Symbole::TYPE , Etat*> > m_transitions;
-        Symbole* currentSym;
+        Symbole* currentSym=0;
         stack<Etat*> m_etats;
         stack<Symbole*> m_symboles;
-        list<Symbole*>* ex;
+        bool isRead=false;
 };
 
 

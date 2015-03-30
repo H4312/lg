@@ -146,7 +146,7 @@ Symbole *Lexer::getSymbole(string str) {
         sym->setValue(stod(str));
     } else if(isIdentifier(str)) {
         sym = new Symbole(Symbole::id);
-        sym->setName(str);
+        sym->setNom(str);
     }
 
     return sym;

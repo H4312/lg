@@ -25,7 +25,7 @@ class Etat
     protected:
     private:
         list<TYPE> m_droite;
-        Symbole::TYPE m_gauche = Symbole::defaut;
+        Symbole::TYPE m_gauche;
         int m_nbr;
         int m_id;
         bool reduction=false;

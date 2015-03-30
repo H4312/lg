@@ -26,67 +26,51 @@ void Automate::lecture(char* filename)
 	lexer.openFile(filename);
 	lexer.splitFileBySym();
 	analyser();
-	TableSymbole* table;
-	programme->exec(table);
 }
 
 void Automate::analyser()
 {
-	bool end = false;
-	int good = 0;
-	while (1) {
-
-		isRead = false;
-		if (currentSym == NULL) {
-			currentSym = lexer.sonder(); //Sondage du prochain Symbole
+	while(1) {
+		isRead=false;
+		if (currentSym == NULL)
+		{
+			currentSym = lexer.sonder();
 			isRead = true;
-			if (currentSym == NULL) //Si fin du fichier
+			if (currentSym==NULL)
 			{
 				currentSym = new Symbole(Symbole::defaut);
-				end = true;
 			}
 		}
-
-		cout << "Symbole courrent : " << currentSym->toString1() << endl;
+		cout<<"Symbole courrent : "<<currentSym->toString1()<<endl;
 		map<Symbole::TYPE, Etat *> temp = m_transitions.find(m_etats.top())->second;
 
 
-		if (temp.find(currentSym->getType()) != temp.end()) { //Si decalage possible
+		if (temp.find(currentSym->getType()) != temp.end()) {
 			cout << "Decalage de " << m_etats.top()->getId();
 			Etat *n = temp.find(currentSym->getType())->second;
-			cout << " vers l'etat " << n->getId() << endl;
+			cout <<" vers l'etat "<<n->getId()<<endl;
 			decalage(n);
 		}
-		else {//Sinon réduction
-			if(m_etats.top()->getGauche()==Symbole::P && !end)
+		else {
+			bool end = false;
+			if (currentSym->getType() == Symbole::defaut)
+				end = true;
+			bool correct = reduire();
+
+			if(!correct)
 			{
-				cout << "Erreur, Symbole inattendu : "<< currentSym->toString1() << endl;
-				currentSym = lexer.readNext();
-				good ++ ;
+				return;
 			}
-			else {
-				bool correct = reduire();
-				/*if (!correct) {
-					return;
-				}*/
 
-				if (currentSym->getType() == Symbole::P) {
-					if (end) {
-						if(good == 0) cout << endl << "Analyse terminée - Syntaxe correcte" << endl;
-						if(good > 0) cout << endl << "Analyse terminée - "<<good-1<< " Erreurs" << endl;
-						programme = currentSym;
-						return;
-					}
-					else {
-						cout << "Erreur, Symbole inattendu " << endl;
-						return;
-					}
-				}
+			if (currentSym->getType()==Symbole::P && end)
+			{
+				cout<<endl<<"Analyse terminée - Syntaxe correcte"<<endl;
+				return;
 			}
+
 		}
-
-
 	}
+
 }
 
 void Automate::decalage(Etat *etat)
@@ -106,9 +90,7 @@ bool Automate::reduire()
 	{
 		Etat* etat = m_etats.top();
 		Symbole* s = new Symbole(etat->getGauche());
-
 		cout<<"Reduction dans l'etat "<< etat->getId()<<" dans " << s->toString1()<<" de ";
-
 		for(int i = 0 ; i < etat->getNbr() ; i++ )
 		{
 			s->ajouterFils(m_symboles.top());
@@ -116,15 +98,13 @@ bool Automate::reduire()
 			cout<<m_symboles.top()->toString1()<<" ";
 			m_symboles.pop();
 		}
-		cout<<endl;
 		currentSym = s;
+		cout<<endl;
 		return true;
 	}
 	else
 	{
-		cout<<endl<<"Symbole inattendu, depilage"<<endl;
-		m_etats.pop();
-		m_symboles.pop();
+		cout<<endl<<"Syntaxe incorrect !!!"<<endl;
 		return false;
 	}
 

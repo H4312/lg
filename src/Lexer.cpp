@@ -39,7 +39,7 @@ bool Lexer::openFile(char *filename)
     }
 }
 
-void Lexer::splitFileBySym() {
+vector<string> * Lexer::splitFileBySym() {
     char c;
     string current;
     bool affsym = false;
@@ -86,6 +86,12 @@ void Lexer::splitFileBySym() {
         {
             // Debut de reconnaissance d'un symbole d'affectation
             affsym = true;
+
+            if(current.length() > 0) {
+                splittedFile->push_back(current);
+                current="";
+            }
+
         }
         else if(isalnum(c))
         {
@@ -94,6 +100,9 @@ void Lexer::splitFileBySym() {
             cerr << "Symbole invalide ligne " << num_line << " position " << num_char << endl;
         }
     }
+    splittedFile->push_back(current);
+
+    return splittedFile;
 }
 
 void Lexer::closeFile()

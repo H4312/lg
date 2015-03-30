@@ -20,8 +20,42 @@ TEST(Lexer, SplitFile)
 {
 
     Lexer lexer;
-    lexer.openFile((char *) "res/programme_ok.txt");
-    lexer.splitFileBySym();
+    lexer.openFile((char *) "res/test_split.txt");
+    vector<string> * v = lexer.splitFileBySym();
+    CHECK_EQUAL("var", v->at(0));
+    CHECK_EQUAL("x", v->at(1));
+    CHECK_EQUAL(";", v->at(2));
+    CHECK_EQUAL("const", v->at(3));
+    CHECK_EQUAL("n", v->at(4));
+    CHECK_EQUAL("=", v->at(5));
+    CHECK_EQUAL("10", v->at(6));
+    CHECK_EQUAL(",", v->at(7));
+    CHECK_EQUAL("n2", v->at(8));
+    CHECK_EQUAL("=", v->at(9));
+    CHECK_EQUAL("100", v->at(10));
+    CHECK_EQUAL(";", v->at(11));
+    CHECK_EQUAL("ecrire", v->at(12));
+    CHECK_EQUAL("n", v->at(13));
+    CHECK_EQUAL("+", v->at(14));
+    CHECK_EQUAL("n2", v->at(15));
+    CHECK_EQUAL(";", v->at(16));
+    CHECK_EQUAL("x", v->at(17));
+    CHECK_EQUAL(":=", v->at(18));
+    CHECK_EQUAL("n", v->at(19));
+    CHECK_EQUAL("+", v->at(20));
+    CHECK_EQUAL("n2", v->at(21));
+    CHECK_EQUAL(";", v->at(22));
+    CHECK_EQUAL("x", v->at(23));
+    CHECK_EQUAL(":=", v->at(24));
+    CHECK_EQUAL("n", v->at(25));
+    CHECK_EQUAL("+", v->at(26));
+    CHECK_EQUAL("2", v->at(27));
+    CHECK_EQUAL(";", v->at(28));
+    CHECK_EQUAL("lire", v->at(29));
+    CHECK_EQUAL("x", v->at(30));
+    CHECK_EQUAL(";", v->at(31));
+
+
     //lexer.DisplaySplittedFile();
     //FAIL("Not finished")
 };

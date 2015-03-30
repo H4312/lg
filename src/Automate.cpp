@@ -396,11 +396,12 @@ map<Etat*, map<TYPE, Etat*> > Automate::initMap() {
 
 	transitions[26].insert(make_pair(Symbole::val, etats.at(37)));
 
-	transitions[26].insert(make_pair(Symbole::T, etats.at(38)));
-	transitions[26].insert(make_pair(Symbole::F, etats.at(18)));
-	transitions[26].insert(make_pair(Symbole::id, etats.at(19)));
-	transitions[26].insert(make_pair(Symbole::val, etats.at(20)));
-	transitions[26].insert(make_pair(Symbole::po, etats.at(21)));
+	transitions[27].insert(make_pair(Symbole::T, etats.at(38)));
+	transitions[27].insert(make_pair(Symbole::F, etats.at(18)));
+	transitions[27].insert(make_pair(Symbole::id, etats.at(19)));
+	transitions[27].insert(make_pair(Symbole::val, etats.at(20)));
+	transitions[27].insert(make_pair(Symbole::po, etats.at(21)));
+
 
 	// transitions[28] reste vide
 	// transitions[29] reste vide

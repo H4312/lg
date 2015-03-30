@@ -15,18 +15,20 @@ class Automate
 {
     public:
         Automate();
-        void lecture(const char* filename);
+        void lecture(char* filename);
         void analyser();
         void decalage(Etat* etat);
-        void reduire();
+        bool reduire();
+		map<Etat*, map<Symbole::TYPE, Etat*> > initMap();
         virtual ~Automate();
     protected:
     private:
         Lexer lexer;
-        map<Etat*, map<TYPE, Etat*> > m_transitions;
-        Symbole* currentSym;
+        map<Etat*, map<Symbole::TYPE , Etat*> > m_transitions;
+        Symbole* currentSym=0;
         stack<Etat*> m_etats;
         stack<Symbole*> m_symboles;
+        bool isRead=false;
 };
 
 

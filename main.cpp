@@ -1,7 +1,5 @@
 #include <iostream>
 #include "Automate.h"
-#include "Symbole.h"
-#include "TableSymbole.h"
 
 class Automate;
 
@@ -9,177 +7,19 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
-	Automate a;
-	Symbole* p = new Symbole(P);
-	
-	Symbole* bi = new Symbole(BI);
-	Symbole* bi2 = new Symbole(BI);
-	Symbole* i = new Symbole(I);
-	Symbole* i2 = new Symbole(I);
-	Symbole* i3 = new Symbole(I);
-	Symbole* o = new Symbole(O);
-	Symbole* o2 = new Symbole(O);
-	Symbole* o3 = new Symbole(O);
-	Symbole* o4 = new Symbole(O);
-	Symbole* opa = new Symbole(opA);
-	Symbole* opa2 = new Symbole(opA);
-	Symbole* plus = new Symbole(pl);
-	Symbole* moins = new Symbole(mn);
-	Symbole* opm = new Symbole(opM);
-	Symbole* opm2 = new Symbole(opM);
-	Symbole* multi = new Symbole(mul);
-	Symbole* multi2 = new Symbole(mul);
-	Symbole* affect = new Symbole(aff);
-	Symbole* t = new Symbole(T);
-	Symbole* t2 = new Symbole(T);
-	Symbole* t3 = new Symbole(T);
-	Symbole* t4 = new Symbole(T);
-	Symbole* t5 = new Symbole(T);
-	Symbole* f = new Symbole(F);
-	Symbole* f2 = new Symbole(F);
-	Symbole* f3 = new Symbole(F);
-	Symbole* f4 = new Symbole(F);
-	Symbole* f5 = new Symbole(F);
-	Symbole* ec = new Symbole(ecrire);
-	Symbole* li = new Symbole(lire);
+    Automate automate;
+    //automate.lecture(argv[argc - 1]);
+    automate.lecture("/home/jeremy/LG/bin/Debug/test.txt");
 
 
-	Symbole* cons_ = new Symbole(cons);
-	Symbole* c = new Symbole(C);
-	Symbole* id_2 = new Symbole(id, "y");
-	Symbole* id_3 = new Symbole(id, "new");
-	Symbole* val_ = new Symbole(val);
-	double valeur(5);
-	val_->setValue(valeur);
-
-	Symbole* bd = new Symbole(BD);
-	Symbole* bd1 = new Symbole(BD);
-	Symbole* bd2 = new Symbole(BD);
-	Symbole* bd3 = new Symbole(BD);
-	Symbole* d1 = new Symbole(D);
-	Symbole* d2 = new Symbole(D);
-	Symbole* var_ = new Symbole(var);
-	Symbole* l = new Symbole(L);
-	Symbole* l2 = new Symbole(L);
-	Symbole* id_ = new Symbole(id, "x");
-
-	p->ajouterFils(bd);
-	bd->ajouterFils(d1);
-	d1->ajouterFils(var_);
-	d1->ajouterFils(l);
-	l->ajouterFils(l2);
-	l->ajouterFils(id_);
-
-
-	bd->ajouterFils(bd1);
-	bd1->ajouterFils(d2);
-	d2->ajouterFils(cons_);
-	d2->ajouterFils(c);
-	c->ajouterFils(id_2);
-	c->ajouterFils(val_);
-	
-
-	Symbole* val1 = new Symbole(val);
-	double valeur1(14);
-	val1->setValue(valeur1);
-	Symbole* val2 = new Symbole(val);
-	double valeur2(19);
-	val2->setValue(valeur2);
-	Symbole* val3 = new Symbole(val);
-	double valeur3(8);
-	val3->setValue(valeur3);
-	Symbole* val4 = new Symbole(val);
-	double valeur4(2);
-	val4->setValue(valeur4);
-
-	Symbole* pF = new Symbole(pf);
-	Symbole* pO = new Symbole(po);
-
-	p->ajouterFils(bi);
-	
-	bi->ajouterFils(i);
-	bi->ajouterFils(bi2);
-	i->ajouterFils(ec);
-	i->ajouterFils(o);
-	o->ajouterFils(o2);
-	o->ajouterFils(opa);
-	o->ajouterFils(t);
-
-	bi2->ajouterFils(i2);
-	i2->ajouterFils(id_);
-	i2->ajouterFils(affect);
-	i2->ajouterFils(val2);
-	/*i2->ajouterFils(li);
-	i2->ajouterFils(id_);*/
-
-
-	o2->ajouterFils(t2);
-	t2->ajouterFils(f);
-	f->ajouterFils(id_2);
-
-	t->ajouterFils(f2);
-	f2->ajouterFils(pO);
-	f2->ajouterFils(o3);
-	f2->ajouterFils(pF);
-
-	o3->ajouterFils(o4);
-	o3->ajouterFils(opa2);
-	o3->ajouterFils(t3);
-
-	o4->ajouterFils(t4);
-	t4->ajouterFils(f3);
-	f3->ajouterFils(val2);
-
-	t3->ajouterFils(t5);
-	t3->ajouterFils(opm);
-	t3->ajouterFils(f5);
-
-	t5->ajouterFils(f4);
-	f4->ajouterFils(val3);
-
-	f5->ajouterFils(val4);
-
-
-
-
-	/*
-	o->ajouterFils(o2);
-	o->ajouterFils(opa);
-	o->ajouterFils(t);
-	o2->ajouterFils(o3);
-	o2->ajouterFils(opa2);
-	o2->ajouterFils(t4);
-	t->ajouterFils(t2);
-	t->ajouterFils(opm);
-	t->ajouterFils(f);
-	t2->ajouterFils(t3);
-	t2->ajouterFils(opm2);
-	t2->ajouterFils(f2);
-	*/
-	
-	opa->ajouterFils(plus);
-	opa2->ajouterFils(moins);
-	opm->ajouterFils(multi);
-	opm2->ajouterFils(multi2);
-
-
-	
-	TableSymbole table;
-	/*
-	p->ConstruireTableSymbole(table);
-	table.afficherTable();
-	cout << "Et la reponse eeeeest : " << o->eval(&table) << endl; 
-	*/
-
-	p->exec(&table);//ConstruireTableSymbole(table);
-	table.afficherTable();
-	//
-	
-	cout << endl << endl << endl;
-
-	
-	//Executeur e;
-	//e->ecrire();
-	
+    /*
+    Lexer lexer;
+    lexer.openFile("/home/jeremy/LG/bin/Debug/test.txt");
+    lexer.splitFileBySym();
+    Symbole* s1 = lexer.readNext();
+    Symbole* s2 = lexer.readNext();
+    Symbole* s3 = lexer.readNext();
+    cout<<s1->getType()<<"  "<<s2->getType()<<"     "<<s3->getType();
+     */
     return 0;
 }

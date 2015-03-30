@@ -22,7 +22,7 @@ class Lexer
         Symbole* readNext();
     bool moveNext();
     Symbole* getSymbole(string str);
-    void splitFileBySym();
+    vector<string> * splitFileBySym();
 
     bool isIdentifier(string const &s);
     bool isInteger(string const &s);

@@ -146,13 +146,6 @@ void Symbole::ConstruireDeclarationConst(TableSymbole &table){
 		TYPE typeFils = (*it)->getType();
 		switch(typeFils)
 		{
-			/*
-			         /\_/\
-			    ____/ o o \
-			  /~____  =ø= /
-			 (______)__m_m)
-			  Bernie has been here.
-			*/
 			case(Symbole::C) :
 			{
 				(*it)->ConstruireDeclarationConst(table);
@@ -208,20 +201,31 @@ void Symbole::exec(TableSymbole* table)
 				{
 					case(Symbole::ecrire) :
 					{
-						cout << "Resultat = " << (*(--fils->end()))->eval(table) << endl ;
+						cout << (*(--fils->end()))->eval(table) << endl ;
 						return;
 					}
 					case(Symbole::lire) : 
 					{
-						double entreeClavier;
-						cin >> entreeClavier;
+						bool erreurFormatNombre = true;
+						string entreeClavier;
+						while(erreurFormatNombre)
+						{
+							erreurFormatNombre = false ;
+							cin >> entreeClavier;
+							int i ; 
+							for(i = 0 ; i < entreeClavier.size() ; i++)
+							{
+								if(!isdigit(entreeClavier[i]))
+								{
+									erreurFormatNombre = true;
+									cerr << "Veuillez entrer un nombre correct : " << endl;
+									break;
+								}
+							}
+						}
 						string nomLire = (*(++fils->begin()))->getNom();
 						Declaration* declarationLire = table->findById(nomLire) ;
-						if(declarationLire != 0)
-						{
-							declarationLire->setVal(entreeClavier);
-						}
-						// TODO mieux traiter l'erreur
+						declarationLire->setVal(stod(entreeClavier));
 						return;
 					}
 					case(Symbole::id) : 

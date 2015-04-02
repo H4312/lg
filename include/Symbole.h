@@ -16,15 +16,11 @@ class Symbole
         {P, BD, BI, D, pv, E, I, val, L, cons, var, C, v, id, eq, ecrire, O, lire, aff, opA, T, opM, F, po, pf, pl, mn, mul, divi, defaut};
         Symbole(TYPE unType);
         Symbole(TYPE unType, string nom);
-        TYPE getType();
-        void ajouterFils(Symbole*);
-        void ConstruireTableSymbole(TableSymbole &table);
-        void ConstruireDeclarationVar(TableSymbole &table);
-        void ConstruireDeclarationConst(TableSymbole &table);
-        void afficher() ;
-       
-        void exec(TableSymbole *table);
         virtual ~Symbole();
+        TYPE getType();
+               
+        void exec(TableSymbole *table);
+        
 
         list<Symbole*> *getFils() ;
         string getNom();
@@ -37,12 +33,20 @@ class Symbole
         string toString1();
         string get_nom() const {return m_nom; }
         double get_value() const {return m_value; }
+        void ajouterFils(Symbole*);
     protected:
     private:
         TYPE m_type;
         string m_nom;
         double m_value;
-        list<Symbole*>* m_fils;
+        list<Symbole*> *m_fils;
+
+
+        void ConstruireTableSymbole(TableSymbole &table);
+        void ConstruireDeclarationVar(TableSymbole &table);
+        void ConstruireDeclarationConst(TableSymbole &table);
+        void afficher() ;
+
 };
 
 typedef Symbole::TYPE TYPE;

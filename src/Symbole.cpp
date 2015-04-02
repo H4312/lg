@@ -10,7 +10,11 @@ Symbole::Symbole(Symbole::TYPE unType){
 }
 
 Symbole::~Symbole() {
-	delete m_fils;
+	for(auto el : *m_fils)
+	{
+		el->~Symbole();
+		delete el->m_fils;
+	}
 }
 
 Symbole::TYPE Symbole::getType()
@@ -207,25 +211,18 @@ void Symbole::exec(TableSymbole* table)
 					case(Symbole::lire) : 
 					{
 						bool erreurFormatNombre = true;
-						string entreeClavier;
-						while(erreurFormatNombre)
+						double entreeClavier;
+						cin >> entreeClavier;
+						while(cin.fail())
 						{
-							erreurFormatNombre = false ;
+							erreurFormatNombre = true;
+							cerr << "Veuillez entrer un nombre correct : " << endl;
 							cin >> entreeClavier;
-							int i ; 
-							for(i = 0 ; i < entreeClavier.size() ; i++)
-							{
-								if(!isdigit(entreeClavier[i]))
-								{
-									erreurFormatNombre = true;
-									cerr << "Veuillez entrer un nombre correct : " << endl;
-									break;
-								}
-							}
+
 						}
 						string nomLire = (*(++fils->begin()))->getNom();
 						Declaration* declarationLire = table->findById(nomLire) ;
-						declarationLire->setVal(stod(entreeClavier));
+						declarationLire->setVal(entreeClavier);
 						return;
 					}
 					case(Symbole::id) : 
@@ -281,8 +278,8 @@ double Symbole::eval(TableSymbole* table)
 				{
 					case(mul) :
 						return ((*itDebut)->eval(table)*(*itFin)->eval(table));
-						break;
 					case(divi) :
+						cout << "Division" << endl;
 						return ((*itDebut)->eval(table)/(*itFin)->eval(table));
 					default : 
 						break;

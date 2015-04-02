@@ -17,7 +17,7 @@ Automate::Automate()
 
 Automate::~Automate()
 {
-
+    delete programme;
 }
 
 void Automate::lecture(char* filename)

@@ -9,8 +9,13 @@ Symbole::Symbole(Symbole::TYPE unType){
     m_fils = new list<Symbole*>;
 }
 
-Symbole::~Symbole() {
-	delete m_fils;
+Symbole::~Symbole() 
+{
+	for(auto el : *m_fils)
+	{		
+		el->~Symbole();
+		delete el->m_fils;
+	}	
 }
 
 Symbole::TYPE Symbole::getType()

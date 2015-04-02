@@ -34,7 +34,7 @@ bool Lexer::openFile(char *filename)
     }
     else
     {
-        cerr << "Unable to open file";
+        cerr << "Unable to open file" << endl;
         return false;
     }
 }
@@ -162,7 +162,7 @@ Symbole *Lexer::getSymbole(string str) {
         sym = new Symbole(Symbole::divi);
     } else if(isOnlyDouble(str.c_str())) {
         sym = new Symbole(Symbole::val);
-        sym->setValue(stod(str));
+        sym->setValeur(stod(str));
     } else if(isIdentifier(str)) {
         sym = new Symbole(Symbole::id);
         sym->setNom(str);

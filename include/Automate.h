@@ -15,9 +15,10 @@ class Automate
 {
     public:
         Automate();
-        void lecture(char* filename);
+        bool lecture(char* filename);
         Symbole * analyser();
         void decalage(Etat* etat);
+        void exec();
         bool reduire();
 		map<Etat*, map<Symbole::TYPE, Etat*> > initMap();
         Symbole* programme=0;
@@ -25,6 +26,7 @@ class Automate
     protected:
     private:
         Lexer lexer;
+        TableDeclarations table;
         map<Etat*, map<Symbole::TYPE , Etat*> > m_transitions;
         Symbole* currentSym=0;
         stack<Etat*> m_etats;

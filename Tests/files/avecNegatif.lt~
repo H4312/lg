@@ -1,7 +1,0 @@
-var a,b,c,d;
-const b = 8;
-const c = -5;
-a := b+c;
-lire d;
-x = a*d;
-ecrire x;

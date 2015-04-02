@@ -12,6 +12,7 @@ int main(int argc, char** argv)
     automate.lecture("/home/jeremy/LG/bin/Debug/test.txt");
     Symbole* p = automate.analyser();
     TableSymbole table;
+    p->eval(&table);
     p->exec(&table);
 
 

@@ -393,14 +393,14 @@ string Symbole::toString1() {
     switch(m_type)
     {
         case pv : return ";";
-        case val : return "val : " +to_string(m_value);
-        case cons : return "cons ";
-        case var : return "var ";
+        case val : return "valeur";
+        case cons : return "const";
+        case var : return "var";
         case v : return ", ";
-        case id : return "id : " + m_nom;
+        case id : return "identificateur";
         case eq : return "=";
-        case ecrire : return "ecrire ";
-        case lire : return "lire ";
+        case ecrire : return "ecrire";
+        case lire : return "lire";
         case aff : return ":= ";
         case po : return "(";
         case pf : return ")";
@@ -408,15 +408,15 @@ string Symbole::toString1() {
         case mn : return "-";
         case mul : return "*";
         case divi : return "/";
-        case BD : return "BD";
-        case BI : return "BI";
-        case L : return "L";
-        case O : return "O";
-        case C : return "C";
-        case D : return "D";
-        case I : return "I";
-        case T : return "T";
-        case F : return "F";
+        case BD : return "Bloc Déclaratif";
+        case BI : return "Bloc Instructif";
+        case L : return "Liste de variable";
+        case O : return "Opération";
+        case C : return "Liste de constante";
+        case D : return "Déclaration";
+        case I : return "Instruction";
+        case T : return "Terme";
+        case F : return "Facteur";
         case opA : return "opA";
         case opM : return "opM";
         case P : return "P";

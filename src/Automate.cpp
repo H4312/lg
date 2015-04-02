@@ -28,7 +28,7 @@ void Automate::lecture(char* filename)
 }
 
 Symbole * Automate::analyser() {
-	bool end = false;
+	end = false;
 	err = 0;
 	while (1) {
 		isRead = false;
@@ -40,28 +40,33 @@ Symbole * Automate::analyser() {
 				end = true;
 			}
 		}
-		//cout << "Symbole courrant : " << currentSym->toString1() << endl;
+		cout << "Symbole courrant : " << currentSym->toString1() << " | ";
 		map<Symbole::TYPE, Etat *> temp = m_transitions.find(m_etats.top())->second;
 
 
 		if (temp.find(currentSym->getType()) != temp.end()) {
-			//cout << "Decalage de " << m_etats.top()->getId();
+			cout << "D " << m_etats.top()->getId();
 			Etat *n = temp.find(currentSym->getType())->second;
-			//cout << " vers l'etat " << n->getId() << endl;
+			cout << " - " << n->getId() << endl;
 			decalage(n);
 		}
 
 		else {
 			bool correct = reduire();
 			if (!correct) {
+				cout<< "Erreur "<<err<< " : Symbole";
+				int size = temp.size();
+				int j = 0;
 				for(map<Symbole::TYPE, Etat *>::iterator p = temp.begin(); p != temp.end(); p++)
 				{
-					cout<<Symbole(p->first).toString1()<<" ";
+					j++;
+					cout<<" \""<<Symbole(p->first).toString1()<<"\"";
+					if(j!=size) cout<<",";
 				}
 				cout<<" attendu"<<endl;
 			}
 
-			if (currentSym->getType() == Symbole::P) {
+			else if (currentSym->getType() == Symbole::P) {
 				if (end) {
 					if (err == 0) cout << endl << "Analyse terminée - Syntaxe correcte" << endl;
 					if (err > 0) cout << endl << "Analyse terminée - " << err << " Erreurs" << endl;
@@ -70,6 +75,7 @@ Symbole * Automate::analyser() {
 				}
 				else {
 					cout << "Erreur, Symbole inattendu " << endl;
+					err ++;
 					lexer.readNext();
 				}
 			}
@@ -92,30 +98,33 @@ void Automate::decalage(Etat *etat)
 
 bool Automate::reduire()
 {
-	if(m_etats.top()->hasReduction())
+	if(m_etats.top()->hasReduction() && (m_etats.top()->getId()!=3 || end))
 	{
 		Etat* etat = m_etats.top();
 		Symbole* s = new Symbole(etat->getGauche());
-		//cout<<"Reduction dans l'etat "<< etat->getId()<<" dans " << s->toString1()<<" de ";
+		cout<<"R "<< etat->getId()<<" "<< s->toString1()<<" -> ";
 		for(int i = 0 ; i < etat->getNbr() ; i++ )
 		{
 			s->ajouterFils(m_symboles.top());
 			m_etats.pop();
-			//cout<<m_symboles.top()->toString1()<<" ";
+			cout<<m_symboles.top()->toString1()<<" ";
 			m_symboles.pop();
 		}
+		cout<<" . "<<endl;
 		currentSym = s;
 		return true;
 	}
 	else {
-		cout << endl <<"Symbole inattendu, depilage de " << m_etats.top()->getId() << endl;
+		//cout << endl <<"Symbole inattendu, depilage de " << m_etats.top()->getId() << endl;
 		while (m_symboles.top()->getType() != Symbole::BD && m_symboles.top()->getType() != Symbole::BI && !m_symboles.empty())
 		{
 			//cout<<"Etat : "<< m_etats.top()->getId()<<" Symbole : "<<m_symboles.top()->toString1();
 			m_symboles.pop();
 			m_etats.pop();
 		}
-		lexer.readNext();
+		if (m_etats.top()->getId() == 3)
+		{lexer.readNext();}
+		currentSym = NULL;
 		err++;
 		return false;
 	}
@@ -378,7 +387,7 @@ map<Etat*, map<TYPE, Etat*> > Automate::initMap() {
 
 	transitions[17].insert(make_pair(Symbole::opM, etats.at(30)));
 	transitions[17].insert(make_pair(Symbole::mul, etats.at(31)));
-	transitions[17].insert(make_pair(Symbole::opA, etats.at(32)));
+	transitions[17].insert(make_pair(Symbole::divi, etats.at(32)));
 
 	// transitions[18] reste vide
 	// transitions[19] reste vide

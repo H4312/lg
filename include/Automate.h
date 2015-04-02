@@ -20,13 +20,13 @@ class Automate
         void decalage(Etat* etat);
         bool reduire();
 		map<Etat*, map<Symbole::TYPE, Etat*> > initMap();
+        Symbole* programme=0;
         virtual ~Automate();
     protected:
     private:
         Lexer lexer;
         map<Etat*, map<Symbole::TYPE , Etat*> > m_transitions;
         Symbole* currentSym=0;
-        Symbole* programme=0;
         stack<Etat*> m_etats;
         stack<Symbole*> m_symboles;
         bool isRead=false;

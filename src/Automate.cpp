@@ -27,7 +27,7 @@ void Automate::lecture(char* filename)
 	lexer.splitFileBySym();
 }
 
-Symbole * Automate::analyser() {
+Symbole* Automate::analyser() {
 	bool end = false;
 	err = 0;
 	while (1) {
@@ -76,8 +76,6 @@ Symbole * Automate::analyser() {
 		}
 	}
 }
-
-
 
 void Automate::decalage(Etat *etat)
 {

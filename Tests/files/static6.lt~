@@ -1,5 +1,0 @@
-var x;
-const n=10, m=14;
-x := n+1;
-n := x+2;
-ecrire n;

@@ -459,15 +459,9 @@ string Symbole::toString1() {
     switch(m_type)
     {
         case pv : return ";";
-<<<<<<< HEAD
         case val : return "valeur";
         case cons : return "const";
         case var : return "var";
-=======
-        case val : return "val : " +to_string(m_valeur);
-        case cons : return "cons ";
-        case var : return "var ";
->>>>>>> a44e9773f89e0b84b54a2b482ce26489df860b8d
         case v : return ", ";
         case id : return "identificateur";
         case eq : return "=";

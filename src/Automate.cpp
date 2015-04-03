@@ -17,7 +17,7 @@ Automate::Automate()
 
 Automate::~Automate()
 {
-
+    delete programme;
 }
 
 void Automate::lecture(char* filename)
@@ -26,6 +26,7 @@ void Automate::lecture(char* filename)
 	lexer.openFile(filename);
 	lexer.splitFileBySym();
 }
+
 
 Symbole * Automate::analyser() {
 	end = false;
@@ -40,14 +41,14 @@ Symbole * Automate::analyser() {
 				end = true;
 			}
 		}
-		cout << "Symbole courrant : " << currentSym->toString1() << " | ";
+		//cout << "Symbole courrant : " << currentSym->toString1() << " | ";
 		map<Symbole::TYPE, Etat *> temp = m_transitions.find(m_etats.top())->second;
 
 
 		if (temp.find(currentSym->getType()) != temp.end()) {
-			cout << "D " << m_etats.top()->getId();
+			//cout << "D " << m_etats.top()->getId();
 			Etat *n = temp.find(currentSym->getType())->second;
-			cout << " - " << n->getId() << endl;
+			//cout << " - " << n->getId() << endl;
 			decalage(n);
 		}
 
@@ -83,8 +84,6 @@ Symbole * Automate::analyser() {
 	}
 }
 
-
-
 void Automate::decalage(Etat *etat)
 {
     m_etats.push(etat);
@@ -102,28 +101,30 @@ bool Automate::reduire()
 	{
 		Etat* etat = m_etats.top();
 		Symbole* s = new Symbole(etat->getGauche());
-		cout<<"R "<< etat->getId()<<" "<< s->toString1()<<" -> ";
+		//cout<<"R "<< etat->getId()<<" "<< s->toString1()<<" -> ";
 		for(int i = 0 ; i < etat->getNbr() ; i++ )
 		{
 			s->ajouterFils(m_symboles.top());
 			m_etats.pop();
-			cout<<m_symboles.top()->toString1()<<" ";
+			//cout<<m_symboles.top()->toString1()<<" ";
 			m_symboles.pop();
 		}
-		cout<<" . "<<endl;
+		//cout<<" . "<<endl;
 		currentSym = s;
 		return true;
 	}
 	else {
 		//cout << endl <<"Symbole inattendu, depilage de " << m_etats.top()->getId() << endl;
+
+		if (m_etats.top()->getId() == 3)
+		{lexer.readNext();}
+
 		while (m_symboles.top()->getType() != Symbole::BD && m_symboles.top()->getType() != Symbole::BI && !m_symboles.empty())
 		{
 			//cout<<"Etat : "<< m_etats.top()->getId()<<" Symbole : "<<m_symboles.top()->toString1();
 			m_symboles.pop();
 			m_etats.pop();
 		}
-		if (m_etats.top()->getId() == 3)
-		{lexer.readNext();}
 		currentSym = NULL;
 		err++;
 		return false;
@@ -397,6 +398,7 @@ map<Etat*, map<TYPE, Etat*> > Automate::initMap() {
 	transitions[21].insert(make_pair(Symbole::F, etats.at(18)));
 	transitions[21].insert(make_pair(Symbole::id, etats.at(19)));
 	transitions[21].insert(make_pair(Symbole::val, etats.at(20)));
+	transitions[21].insert(make_pair(Symbole::O, etats.at(33)));
 
 	// transitions[22] reste vide
 

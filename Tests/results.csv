@@ -1,0 +1,25 @@
+Test ID;Return code validation;Out result;StdErr result;File creation result;Global result
+./01.NoArgument;Ok;Non testé;Ok;Non testé;Ok
+./02.FichierInexistant;Echec;Non testé;Echec;Non testé;Echec
+./03.FichierExistant;Ok;Non testé;Non testé;Non testé;Ok
+./04.Affichage;Ok;Echec;Non testé;Non testé;Echec
+./05.DoubleDeclaration;Ok;Non testé;Echec;Non testé;Echec
+./06.1.AnalyseStatique;Ok;Non testé;Echec;Non testé;Echec
+./06.2.AnalyseStatique;Ok;Non testé;Echec;Non testé;Echec
+./06.3.AnalyseStatique;Ok;Non testé;Echec;Non testé;Echec
+./06.4.AnalyseStatique;Ok;Non testé;Echec;Non testé;Echec
+./07.Execution;Ok;Echec;Non testé;Non testé;Echec
+./08.1.Optimisation;Echec;Echec;Non testé;Non testé;Echec
+./08.2.Optimisation;Echec;Echec;Non testé;Non testé;Echec
+./09.ErreurLexicale;Ok;Non testé;Echec;Non testé;Echec
+./1-07.2.Execution;Ok;Echec;Non testé;Non testé;Echec
+./1-07.3.Execution;Ok;Echec;Non testé;Non testé;Echec
+./1-07.4.Execution;Ok;Echec;Non testé;Non testé;Echec
+./1-09.2ErreurLexical;Echec;Non testé;Echec;Non testé;Echec
+./1-09.3ErreurLexical;Echec;Non testé;Echec;Non testé;Echec
+./10.ErreurSyntaxique;Ok;Non testé;Echec;Non testé;Echec
+./1-10.2.ErreurSyntaxique;Echec;Non testé;Echec;Non testé;Echec
+./1-10.3.ErreurSyntaxique;Echec;Non testé;Echec;Non testé;Echec
+./1-11.FichierVide;Echec;Non testé;Echec;Non testé;Echec
+./1-12.TestSyntaxique;Ok;Echec;Non testé;Non testé;Echec
+./1-13.FauxArgument;Echec;Non testé;Echec;Non testé;Echec

@@ -1,29 +1,45 @@
 #include <iostream>
+#include <string.h>
 #include "Automate.h"
-
-class Automate;
 
 using namespace std;
 
 int main(int argc, char** argv)
 {
+    
+
+    string erreurArgument = "Erreur, veuillez specifier un argument existant\nUtilisation : \n../lut [-p] [-a] [-e] [-o] source.lt \n[-p] affiche le code source reconnu \n[-a] analyse le programme de maniere statique \n[-e] execute interactivement le programme \n[-o] optimise les expressions et instructions \n";
+    if(argc == 1){
+        cerr << erreurArgument << endl;
+        return 1;
+    }
     Automate automate;
-    //automate.lecture(argv[argc - 1]);
-    automate.lecture("/home/jeremy/LG/bin/Debug/test.txt");
-    Symbole* p = automate.analyser();
     TableSymbole table;
-    p->eval(&table);
-    p->exec(&table);
+    automate.lecture(argv[argc-1]);
+    automate.analyser();
+    
+    for(int i = 1 ; i < argc-1 ; i++) 
+    {
+        if(strcmp(argv[i], "-a")==0)
+        {
+            // Analyse statique
+        }
+        else if(strcmp(argv[i],"-e")==0)
+        {
+            automate.programme->exec(&table);
+            //table.afficherTable();
+        }
+        else if(strcmp(argv[i],"-p")==0)
+        {
+            cout << automate.programme->toString() << endl ;
+        }
+        else if(strcmp(argv[i],"-p")!=0 && strcmp(argv[i],"-e")!=0 && strcmp(argv[i], "-a")!=0)
+        {
+            cerr << erreurArgument << endl;
+            return 1;
+        }
+    }
 
 
-    /*
-    Lexer lexer;
-    lexer.openFile("/home/jeremy/LG/bin/Debug/test.txt");
-    lexer.splitFileBySym();
-    Symbole* s1 = lexer.readNext();
-    Symbole* s2 = lexer.readNext();
-    Symbole* s3 = lexer.readNext();
-    cout<<s1->getType()<<"  "<<s2->getType()<<"     "<<s3->getType();
-     */
     return 0;
 }

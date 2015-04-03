@@ -16,6 +16,9 @@ class Declaration
 		void setVal(double val);		
 		bool isConstante(){return m_isConst;}
 		bool isAffectee(){return m_isAffectee;}
+		bool isUtilisee(){return m_isUtilisee;}
+		void setIsAffectee(bool isAffectee);
+		void setIsUtilisee(bool isUtilisee);
 		const bool isConst = false;
 
 	
@@ -24,6 +27,7 @@ class Declaration
 		double val ;
 		bool m_isAffectee;
 		bool m_isConst;
+		bool m_isUtilisee;
 	private:
 };
 

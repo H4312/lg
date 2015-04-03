@@ -23,12 +23,12 @@ int main(int argc, char** argv)
     {
         if(strcmp(argv[i], "-a")==0)
         {
-            automate.programme->analyserStatiquement();
+            cout << automate.programme->analyserStatiquement() << endl;;
         }
         else if(strcmp(argv[i],"-e")==0)
         {
-            automate.programme->transformation();
-            //automate.exec();
+            //automate.programme->transformation();
+            automate.exec();
         }
         else if(strcmp(argv[i],"-p")==0)
         {

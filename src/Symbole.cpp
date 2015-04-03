@@ -147,92 +147,136 @@ void Symbole::construireDeclarationConst(TableDeclarations *table)
 }
 
 //Permet de construire la table des déclarations pour l'analyse statique
-void Symbole::analyserStatiquement()
+int Symbole::analyserStatiquement()
 {
+	int retour = 0;
 	TableDeclarations table;
+	vector<string> varDeclareesUtilisees;
 	construireTableDeclarations(&table);
-	analyseStatique(table);
+	retour = analyseStatique(&table);
+	for(auto el : table.declarations)
+	{
+		if(!el.isConstante() && el.isUtilisee() && !el.isAffectee())
+		{
+			cerr << "Erreur dans l'analyse statique : Variable '" << el.getNom() << "' déclarée, utilisée mais non affectée" << endl;
+			retour = 1;
+		}
+		else if(!el.isConstante() && !el.isUtilisee() && el.isAffectee())
+		{
+			cerr << "Erreur dans l'analyse statique : Variable '" << el.getNom() << "' déclarée, affecté mais non utilisée" << endl;
+			retour = 1;
+		}
+		else if(!el.isConstante() && !el.isUtilisee() && !el.isAffectee())
+		{
+			cerr << "Erreur dans l'analyse statique : Variable '" << el.getNom() << "' déclarée mais non affectée et non utilisée" << endl;
+			retour = 1;
+		}
+	}
+	return retour;
 }
 
 //L'analyseur statique
-void Symbole::analyseStatique(TableDeclarations table)
+int Symbole::analyseStatique(TableDeclarations *table)
 {
+	int retour = 0 ;
     TYPE type = this->getType();
     list<Symbole*> *fils = this->m_fils;
    
     switch(type)
     {
         case(Symbole::P) :
+        case(Symbole::BI) :
+        {
+            for (list<Symbole*>::iterator it=fils->begin(); it != fils->end(); ++it)
             {
-                for (list<Symbole*>::iterator it=fils->begin(); it != fils->end(); ++it)
-                {
-                    (*it)->analyseStatique(table);
-                }
+                retour = (*it)->analyseStatique(table);
             }
-			break;
-		case(Symbole::BI) :
+        }
+		break;
         case(Symbole::O) :
         case(Symbole::F) :
         case(Symbole::T) :
+        {
+            for (list<Symbole*>::iterator it=fils->begin(); it != fils->end(); ++it)
             {
-                for (list<Symbole*>::iterator it=fils->begin(); it != fils->end(); ++it)
-                {
-                    (*it)->analyseStatique(table);
-                }
+                retour = (*it)->analyseStatique(table);
             }
-			break;
+        }
+		break;
         case(Symbole::I):
             {
                 list<Symbole*>::iterator it=fils->begin();
-                TYPE typeFils = (*it)->getType();
-                
-
+                TYPE typeFils = (*it)->getType(); 
                 if (fils->size()>0)
                 {
 					switch(typeFils)
 					{
 					case(Symbole::id) :
 						{
-							string nomLire = (*it)->getNom();
-							Declaration* declarationLire = table.findById(nomLire);
-							if(declarationLire == nullptr)
+							string nom = (*it)->getNom();
+							Declaration* declaration = table->findById(nom);
+							if(declaration == nullptr)
 							{
-								cerr<<"Erreur dans l'analyse statique: Variable affectée non déclarée"<<endl;
+								cerr << "Erreur dans l'analyse statique : Variable affectée non déclarée" << endl;
+								retour = 1;
 							}
-							else if(declarationLire->isConstante())
+							else if(declaration->isConstante())
 							{
-								cerr<<"Erreur dans l'analyse statique: Constante ne pas pas être modifiée"<<endl;
+								cerr << "Erreur dans l'analyse statique : Constante ne pas pas être modifiée" << endl;
+								retour = 1;
+							}
+							else if(declaration != nullptr && !declaration->isConstante())
+							{
+								declaration->setIsAffectee(true);
 							}
 						}
 						break;
 						case(Symbole::lire) :
 						{
-							string nomLire = (*(--fils->end()))->getNom();
-							Declaration* declarationLire = table.findById(nomLire) ;
-							if(declarationLire == 0)
+							string nom = (*(--fils->end()))->getNom();
+							Declaration* declaration = table->findById(nom) ;
+							if(declaration == 0)
 							{
-								cerr<<"Erreur dans l'analyse statique: Variable lue non déclarée"<<endl;
+								cerr << "Erreur dans l'analyse statique : Variable lue non déclarée" <<endl;
+								retour = 1;
+							}
+							else if(declaration != nullptr && !declaration->isConstante())
+							{
+								declaration->setIsAffectee(true);
 							}
 						}
 						break;
 						case(Symbole::ecrire) :
 						{
-							string nomLire = (*(--fils->begin()))->getNom();
-							Declaration* declarationLire = table.findById(nomLire) ;
-							if(declarationLire == 0)
-							{
-								cerr<<"Erreur dans l'analyse statique: Variable écrite non déclarée"<<endl;
-							}
+							retour = (*(--fils->end()))->analyseStatique(table);	
 						}
 						break;
 					}
                 }
 
             }
-            break;
-            
-		}       
+            break; 
+		case(Symbole::id) :
+		{
+			Declaration* declaration = table->findById(m_nom) ;
+			if(declaration == nullptr)
+			{
+				cerr<< "Erreur dans l'analyse statique : Variable écrite non déclarée" <<endl;
+				retour = 1;
+			}
+			else if(declaration != nullptr && !declaration->isConstante())
+			{
+				declaration->setIsUtilisee(true);
+			}
+			break;
+			
+		} 
+
+	}     
+	return retour;
 }
+
+
 
 /*
  * Permet d'exécuter le code lutin
@@ -277,6 +321,8 @@ void Symbole::exec(TableDeclarations* table)
 						{
 							erreurFormatNombre = true;
 							cerr << "Veuillez entrer un nombre correct : " << endl;
+							cin.clear();
+							cin.ignore(256,'\n');
 							cin >> entreeClavier;
 						}
 						// On récupère le nom de la variable à affecter 

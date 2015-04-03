@@ -59,16 +59,18 @@ Symbole * Automate::analyser() {
 		else {
 			bool correct = reduire();
 			if (!correct) {
-				cout<< "Erreur "<<err<< " : Symbole";
+				cerr<< "Erreur "<<err<< " : Symbole";
 				int size = temp.size();
 				int j = 0;
 				for(map<Symbole::TYPE, Etat *>::iterator p = temp.begin(); p != temp.end(); p++)
 				{
 					j++;
-					cout<<" \""<<Symbole(p->first).toString1()<<"\"";
-					if(j!=size) cout<<",";
+					if (Symbole(p->first).toString1()!="") {
+						cerr << " \"" << Symbole(p->first).toString1() << "\"";
+						if (j != size) cerr << ",";
+					}
 				}
-				cout<<" attendu"<<endl;
+				cerr<<" attendu"<<endl;
 			}
 
 			else if (currentSym->getType() == Symbole::P) {
@@ -79,7 +81,7 @@ Symbole * Automate::analyser() {
 					return programme;
 				}
 				else {
-					cout << "Erreur, Symbole inattendu " << endl;
+					cerr << "Erreur, Symbole inattendu " << endl;
 					err ++;
 					lexer.readNext();
 				}

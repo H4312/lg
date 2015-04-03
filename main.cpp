@@ -23,7 +23,7 @@ int main(int argc, char** argv)
     {
         if(strcmp(argv[i], "-a")==0)
         {
-            cout << automate.programme->analyserStatiquement() << endl;;
+            automate.programme->analyserStatiquement() << endl;
         }
         else if(strcmp(argv[i],"-e")==0)
         {

@@ -27,6 +27,8 @@ class Symbole
         string toString1();
         void ajouterFils(Symbole*);
         void exec(TableDeclarations *table);
+        void analyserStatiquement();
+
          
     protected:
 
@@ -41,6 +43,8 @@ class Symbole
         void construireDeclarationConst(TableDeclarations *table);
         int eval(TableDeclarations *table); 
         void afficher() ;
+        bool declarationSansUtilisation(string nom);
+	    void analyseStatique(TableSymbole table);
 
 };
 

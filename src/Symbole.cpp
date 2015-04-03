@@ -105,7 +105,11 @@ void Symbole::construireDeclarationVar(TableDeclarations *table)
 			case(Symbole::id) :
 			{
 				DeclarationVar var(el->m_nom);
-				table->ajouterDeclaration(var);
+				if(table->findById(el->m_nom))
+				{
+					cerr << "La variable " << el->m_nom << " a déjà été déclarée" << endl;
+				}
+				else table->ajouterDeclaration(var);
 				return;
 			}
 			default :
@@ -257,7 +261,6 @@ int Symbole::analyseStatique(TableDeclarations *table)
 						break;
 					}
                 }
-
             }
             break; 
 		case(Symbole::id) :
@@ -272,10 +275,8 @@ int Symbole::analyseStatique(TableDeclarations *table)
 			{
 				declaration->setIsUtilisee(true);
 			}
-			break;
-			
+			break;	
 		} 
-
 	}     
 	return retour;
 }
@@ -315,25 +316,34 @@ void Symbole::exec(TableDeclarations* table)
 					}
 					case(Symbole::lire) : 
 					{
-						bool erreurFormatNombre = true;
-						int entreeClavier;
-						cin >> entreeClavier;
-						// On boucle jusqu'à ce que l'entrée soit bien un nombre
-						while(cin.fail())
-						{
-							erreurFormatNombre = true;
-							cerr << "Veuillez entrer un nombre correct : " << endl;
-							cin.clear();
-							cin.ignore(256,'\n');
-							cin >> entreeClavier;
-
-						}
-
 						// On récupère le nom de la variable à affecter 
 						string nomLire = (*(++m_fils->begin()))->m_nom;
 						// On cherche dans la table la déclaration associée
 						Declaration* declarationLire = table->findById(nomLire) ;
-						declarationLire->setVal(entreeClavier);
+						if(!declarationLire->isConstante())
+						{
+							bool erreurFormatNombre = true;
+							int entreeClavier;
+							cin >> entreeClavier;
+							// On boucle jusqu'à ce que l'entrée soit bien un nombre
+							while(cin.fail())
+							{
+								erreurFormatNombre = true;
+								cerr << "Veuillez entrer un nombre correct : " << endl;
+								cin.clear();
+								cin.ignore(256,'\n');
+								cin >> entreeClavier;
+
+							}
+							// On recupère le dernier fils de l'instruction et on evalue pour pouvoir l'affecter
+							declarationLire->setVal(entreeClavier);
+						}
+						else 
+						{
+							cerr << "Une constante ne peut etre modifiée" << endl;
+						}
+
+						
 						return;
 					}
 					case(Symbole::id) : 
@@ -342,8 +352,16 @@ void Symbole::exec(TableDeclarations* table)
 						string nomAff = (*m_fils->begin())->m_nom;
 						// On cherche dans la table la déclaration associée
 						Declaration* declarationAff = table->findById(nomAff) ;
-						// On recupère le dernier fils de l'instruction et on evalue pour pouvoir l'affecter
-						declarationAff->setVal((*(--m_fils->end()))->eval(table));
+						if(!declarationAff->isConstante())
+						{
+							// On recupère le dernier fils de l'instruction et on evalue pour pouvoir l'affecter
+							declarationAff->setVal((*(--m_fils->end()))->eval(table));
+						}
+						else 
+						{
+							cerr << "Une constante ne peut etre modifiée" << endl;
+						}
+						
 						return;
 					}
 					default :
@@ -408,8 +426,16 @@ int Symbole::eval(TableDeclarations* table)
 						// On evalue le sous arbre gauche * sous arbre droit
 						return ((*itDebut)->eval(table)*(*itFin)->eval(table));
 					case(divi) :
+					{
 						// On evalue le sous arbre gauche / sous arbre droit
-						return ((*itDebut)->eval(table)/(*itFin)->eval(table));
+						int droit = (*itFin)->eval(table);
+						if(droit == 0)
+						{
+							cerr << "FATAL ERROR DIVISION PAR ZERO TU T'ES CRU OU ????" << endl;
+							return -1;
+						}
+						else return ((*itDebut)->eval(table)/(*itFin)->eval(table));
+					}
 					default : 
 						break;
 				}

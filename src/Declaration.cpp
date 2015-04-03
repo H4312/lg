@@ -22,12 +22,12 @@ void Declaration::setNom(string nom)
 	this->nom = nom;
 }
 
-double Declaration::getVal()
+int Declaration::getVal()
 {
 	return val;
 }
 
-void Declaration::setVal(double val)
+void Declaration::setVal(int val)
 {
 	this->val = val ;
 }

@@ -16,17 +16,20 @@ class Automate
     public:
         Automate();
         bool lecture(char* filename);
-        Symbole * analyser();
+        void analyser();
         void decalage(Etat* etat);
         void exec();
+        void afficher();
+        void analyserStatiquement();
+        void transformer();
         bool reduire();
 		map<Etat*, map<Symbole::TYPE, Etat*> > initMap();
-        Symbole* programme=0;
         virtual ~Automate();
     protected:
     private:
         Lexer lexer;
         TableDeclarations table;
+        Symbole* programme=0;
         map<Etat*, map<Symbole::TYPE , Etat*> > m_transitions;
         Symbole* currentSym=0;
         stack<Etat*> m_etats;

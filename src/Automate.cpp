@@ -20,6 +20,26 @@ Automate::~Automate()
 	delete programme;
 }
 
+void Automate::exec()
+{
+	programme->exec(&table);
+}
+
+void Automate::afficher()
+{
+	cout << programme->toString() << endl ;
+}
+
+void Automate::transformer()
+{
+	programme->transformation();
+}
+
+void Automate::analyserStatiquement()
+{
+	programme->analyserStatiquement();
+}
+
 bool Automate::lecture(char* filename)
 {
 	m_transitions = initMap();
@@ -32,7 +52,7 @@ bool Automate::lecture(char* filename)
 }
 
 
-Symbole * Automate::analyser() {
+void Automate::analyser() {
 	end = false;
 	err = 0;
 	while (1) {
@@ -76,9 +96,13 @@ Symbole * Automate::analyser() {
 			else if (currentSym->getType() == Symbole::P) {
 				if (end) {
 					if (err == 0) cout << endl << "Analyse terminée - Syntaxe correcte" << endl;
-					if (err > 0) cout << endl << "Analyse terminée - " << err << " Erreurs" << endl;
+					if (err > 0)
+					{
+						cerr << endl << "Analyse terminée - " << err << " erreur(s)" << endl;
+						exit(1);
+					} 
 					programme = currentSym;
-					return programme;
+					return;
 				}
 				else {
 					cerr << "Erreur, Symbole inattendu " << endl;
@@ -136,11 +160,6 @@ bool Automate::reduire()
 		return false;
 	}
 
-}
-
-void Automate::exec()
-{
-	programme->exec(&table);
 }
 
 map<Etat*, map<TYPE, Etat*> > Automate::initMap() {

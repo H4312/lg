@@ -49,7 +49,7 @@ file(
 
 add_executable(
 
-    lg
+    lut
 
     ${source_files}
 
@@ -73,4 +73,4 @@ add_executable(
 
 target_link_libraries(testsuite CppUTest)
 
-install(TARGETS lg DESTINATION bin)
+install(TARGETS lut DESTINATION lg/bin)

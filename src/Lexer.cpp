@@ -34,7 +34,7 @@ bool Lexer::openFile(char *filename)
     }
     else
     {
-        cerr << "Unable to open file" << endl;
+        cerr << "Erreur lors de l'ouverture du fichier ou fichier inexistant" << endl;
         return false;
     }
 }

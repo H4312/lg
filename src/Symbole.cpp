@@ -12,11 +12,7 @@ Symbole::Symbole(Symbole::TYPE unType){
 // Destructeur
 Symbole::~Symbole() 
 {
-	for(auto el : *m_fils)
-	{		
-		el->~Symbole();
-		delete el->m_fils;
-	}	
+	m_fils->clear();	
 }
 
 // Getter
@@ -107,7 +103,7 @@ void Symbole::construireDeclarationVar(TableDeclarations *table)
 				DeclarationVar var(el->m_nom);
 				if(table->findById(el->m_nom))
 				{
-					cerr << "La variable " << el->m_nom << " a déjà été déclarée" << endl;
+					cerr << "La variable '" << el->m_nom << "' a déjà été déclarée" << endl;
 				}
 				else table->ajouterDeclaration(var);
 				return;
@@ -154,39 +150,37 @@ void Symbole::construireDeclarationConst(TableDeclarations *table)
 	}
 }
 
-//Permet de construire la table des déclarations pour l'analyse statique
-int Symbole::analyserStatiquement()
+/*
+ * Permet d'initialiser l'analyse statique avec paramètre et d'en analyser les retours
+ */
+void Symbole::analyserStatiquement()
 {
 	int retour = 0;
 	TableDeclarations table;
-	vector<string> varDeclareesUtilisees;
 	construireTableDeclarations(&table);
-	retour = analyseStatique(&table);
+	analyseStatique(&table);
 	for(auto el : table.declarations)
 	{
 		if(!el.isConstante() && el.isUtilisee() && !el.isAffectee())
 		{
 			cerr << "Erreur dans l'analyse statique : Variable '" << el.getNom() << "' déclarée, utilisée mais non affectée" << endl;
-			retour = 1;
 		}
 		else if(!el.isConstante() && !el.isUtilisee() && el.isAffectee())
 		{
 			cerr << "Erreur dans l'analyse statique : Variable '" << el.getNom() << "' déclarée, affecté mais non utilisée" << endl;
-			retour = 1;
 		}
 		else if(!el.isConstante() && !el.isUtilisee() && !el.isAffectee())
 		{
 			cerr << "Erreur dans l'analyse statique : Variable '" << el.getNom() << "' déclarée mais non affectée et non utilisée" << endl;
-			retour = 1;
 		}
 	}
-	return retour;
 }
 
-//L'analyseur statique
-int Symbole::analyseStatique(TableDeclarations *table)
+/*
+ * Permet d'effectuer l'analyse statique
+ */
+void Symbole::analyseStatique(TableDeclarations *table)
 {
-	int retour = 0 ;
     TYPE type = this->getType();
     list<Symbole*> *fils = this->m_fils;
    
@@ -197,7 +191,7 @@ int Symbole::analyseStatique(TableDeclarations *table)
         {
             for (list<Symbole*>::iterator it=fils->begin(); it != fils->end(); ++it)
             {
-                retour = (*it)->analyseStatique(table);
+                (*it)->analyseStatique(table);
             }
         }
 		break;
@@ -207,7 +201,7 @@ int Symbole::analyseStatique(TableDeclarations *table)
         {
             for (list<Symbole*>::iterator it=fils->begin(); it != fils->end(); ++it)
             {
-                retour = (*it)->analyseStatique(table);
+                (*it)->analyseStatique(table);
             }
         }
 		break;
@@ -221,17 +215,15 @@ int Symbole::analyseStatique(TableDeclarations *table)
 					{
 					case(Symbole::id) :
 						{
-							string nom = (*it)->getNom();
+							string nom = (*it)->m_nom ;
 							Declaration* declaration = table->findById(nom);
 							if(declaration == nullptr)
 							{
-								cerr << "Erreur dans l'analyse statique : Variable affectée non déclarée" << endl;
-								retour = 1;
+								cerr << "Erreur dans l'analyse statique : Variable '" << nom << "' affectée non déclarée" << endl;
 							}
 							else if(declaration->isConstante())
 							{
-								cerr << "Erreur dans l'analyse statique : Constante ne pas pas être modifiée" << endl;
-								retour = 1;
+								cerr << "Erreur dans l'analyse statique : Constante '" << nom << "' ne pas pas être modifiée" << endl;
 							}
 							else if(declaration != nullptr && !declaration->isConstante())
 							{
@@ -245,8 +237,7 @@ int Symbole::analyseStatique(TableDeclarations *table)
 							Declaration* declaration = table->findById(nom) ;
 							if(declaration == 0)
 							{
-								cerr << "Erreur dans l'analyse statique : Variable lue non déclarée" <<endl;
-								retour = 1;
+								cerr << "Erreur dans l'analyse statique : Variable '" << nom << "' lue non déclarée" <<endl;
 							}
 							else if(declaration != nullptr && !declaration->isConstante())
 							{
@@ -256,9 +247,11 @@ int Symbole::analyseStatique(TableDeclarations *table)
 						break;
 						case(Symbole::ecrire) :
 						{
-							retour = (*(--fils->end()))->analyseStatique(table);	
+							(*(--fils->end()))->analyseStatique(table);	
 						}
 						break;
+						default:
+							break;
 					}
                 }
             }
@@ -268,8 +261,7 @@ int Symbole::analyseStatique(TableDeclarations *table)
 			Declaration* declaration = table->findById(m_nom) ;
 			if(declaration == nullptr)
 			{
-				cerr<< "Erreur dans l'analyse statique : Variable écrite non déclarée" <<endl;
-				retour = 1;
+				cerr << "Erreur dans l'analyse statique : Variable '" << m_nom << "' écrite non déclarée" <<endl;
 			}
 			else if(declaration != nullptr && !declaration->isConstante())
 			{
@@ -277,8 +269,9 @@ int Symbole::analyseStatique(TableDeclarations *table)
 			}
 			break;	
 		} 
+		default :
+			break;
 	}     
-	return retour;
 }
 
 /*
@@ -340,10 +333,9 @@ void Symbole::exec(TableDeclarations* table)
 						}
 						else 
 						{
-							cerr << "Une constante ne peut etre modifiée" << endl;
+							cerr << "Une constante ne peut être modifiée" << endl;
+							exit(1);
 						}
-
-						
 						return;
 					}
 					case(Symbole::id) : 
@@ -359,7 +351,8 @@ void Symbole::exec(TableDeclarations* table)
 						}
 						else 
 						{
-							cerr << "Une constante ne peut etre modifiée" << endl;
+							cerr << "Une constante ne peut être modifiée" << endl;
+							exit(1);
 						}
 						
 						return;
@@ -431,8 +424,8 @@ int Symbole::eval(TableDeclarations* table)
 						int droit = (*itFin)->eval(table);
 						if(droit == 0)
 						{
-							cerr << "FATAL ERROR DIVISION PAR ZERO TU T'ES CRU OU ????" << endl;
-							return -1;
+							cerr << "Erreur : Division par 0, arrêt du programme" << endl;
+							exit(1);
 						}
 						else return ((*itDebut)->eval(table)/(*itFin)->eval(table));
 					}
@@ -443,6 +436,7 @@ int Symbole::eval(TableDeclarations* table)
 			break;
 			// Si le milieu est O (ie on a des parenthèses), il faut évaluer ses m_fils
 			case(Symbole::O) :
+			case(Symbole::val) :
 				return (*itMilieu)->eval(table);
 			default :
 				break;
@@ -485,6 +479,11 @@ int Symbole::eval(TableDeclarations* table)
 void Symbole::transformation()
 {
 	TableDeclarations table;
+	transformation(&table);
+}
+
+void Symbole::transformation(TableDeclarations *table)
+{
 	switch(m_type)
 	{
 		// On appelle récursivement transformation jusqu'à tomber sur une O (opération)
@@ -494,31 +493,22 @@ void Symbole::transformation()
 		{
 			for (auto el : *m_fils)
 			{
-				el->transformation();
+				el->transformation(table);
+			}
+			break;
+		}
+		// Si on a BD on construit la table de déclaration locale
+		case(Symbole::BD) :
+		{
+			for (auto el : *m_fils)
+			{
+				el->construireTableDeclarations(table);
 			}
 			break;
 		}
 		case(Symbole::O) :
 		{
-			std::vector<string> idConstantes;
-			bool toutesConst = true;
-			for (auto el : *m_fils)
-			{
-				toutesConst = toutesConst && el->operationConstante(&idConstantes, &table);
-				if(!toutesConst) 
-					{
-						cout << "Pas tte const fadaaaa" << endl ;
-						break;
-					}
-			}
-			break;
-		}
-		case(Symbole::BD) :
-		{
-			for (auto el : *m_fils)
-			{
-				el->construireTableDeclarations(&table);
-			}
+			operationConstante(table);
 			break;
 		}
 		default :
@@ -526,7 +516,7 @@ void Symbole::transformation()
 	}
 }
 
-bool Symbole::operationConstante(std::vector<string> *idConstantes, TableDeclarations *table)
+bool Symbole::operationConstante(TableDeclarations *table)
 {
 	switch(m_type)
 	{
@@ -534,24 +524,38 @@ bool Symbole::operationConstante(std::vector<string> *idConstantes, TableDeclara
 		case(Symbole::F) :
 		case(Symbole::T) :
 		{
+			// On appelle récursivement jusqu'à tomber sur un id
+			bool tousConst = true;
 			for (auto el : *m_fils)
 			{
-				el->operationConstante(idConstantes, table);
+				bool estConst = el->operationConstante(table);
+				tousConst = tousConst && estConst ;
 			}
-			break;
+			// Si toutes les operandes sont constantes on remplace par la valeur et on change le type du symbole
+			if(tousConst) 
+			{
+				m_valeur = eval(table);
+				m_type = Symbole::val;
+				m_fils->clear();
+			} 
+			return tousConst ; 
 		}
 		case(Symbole::id) :
 		{
 			Declaration* declaration = table->findById(m_nom) ;
-			if(declaration->isConst)
-			{
-				idConstantes->push_back(m_nom);
+			// Si l'id est celui d'une constante on remplace par sa valeur 
+			if(declaration->isConstante())
+			{ 
+				m_type = Symbole::val;
+				m_nom = "";
+				m_valeur = declaration->getVal();
 				return true;
 			}
 			return false;
 		}
+		// Pour traiter les fils de F tels que parentheses, ou les symboles d'opération (+, -, *, /)
 		default :
-			break;
+			return true;
 	}
 }
 

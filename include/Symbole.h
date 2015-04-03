@@ -2,7 +2,6 @@
 #define SYMBOLE_H
 #include <string>
 #include <list>
-#include <vector>
 #include "TableDeclarations.h"
 
 using namespace std;
@@ -15,7 +14,7 @@ class Symbole
         /*0  1   2  3   4  5  6   7   8   9   10   11  12 13  14   15    16   17   18   19   20  21  22 23  24  25  26  27     28*/ 
         Symbole(TYPE unType);
         virtual ~Symbole();
-        
+
         // Getter & Setter
         TYPE getType();
         string getNom();
@@ -28,11 +27,9 @@ class Symbole
         string toString1();
         void ajouterFils(Symbole*);
         void exec(TableDeclarations *table);
-        int analyserStatiquement();
-        void transformation();
-         
+        void analyserStatiquement();
+        void transformation();  
     protected:
-
     private:
         TYPE m_type;
         string m_nom;
@@ -44,9 +41,8 @@ class Symbole
         void construireDeclarationConst(TableDeclarations *table);
         int eval(TableDeclarations *table); 
         void afficher() ;
-        bool declarationSansUtilisation(string nom);
-	    int analyseStatique(TableDeclarations *table);
-        bool operationConstante(vector<string> *idConstantes, TableDeclarations *table);
+	    void analyseStatique(TableDeclarations *table);
+        bool operationConstante(TableDeclarations *table);
         void transformation(TableDeclarations *table);
 
 };

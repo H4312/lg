@@ -1,6 +1,5 @@
-#if !defined(__lg_diag_classe_TableSymbole_h)
-#define __lg_diag_classe_TableSymbole_h
-
+#ifndef TABLEDECLARATIONS_H
+#define TABLEDECLARATIONS_H
 #include "Declaration.h"
 #include "DeclarationVar.h"
 #include "DeclarationConst.h"
@@ -15,7 +14,6 @@ class TableDeclarations
 		std::list<Declaration> declarations;
 		Declaration* findById(string id);
 		void afficherTable();
-
 	protected:
 	private:
 };

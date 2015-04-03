@@ -180,7 +180,6 @@ void Symbole::exec(TableDeclarations* table)
 				{
 					case(Symbole::ecrire) :
 					{
-						cout << "Ecrire " << (*(--m_fils->end()))->m_type << endl;
 						cout << (*(--m_fils->end()))->eval(table) << endl ;
 						return;
 					}

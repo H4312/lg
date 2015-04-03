@@ -1,8 +1,6 @@
 #include <CppUTest/CommandLineTestRunner.h>
 #include <Automate.h>
 #include <algorithm>
-#include <string.h>
-#include <strings.h>
 #include <iostream>
 #include <sstream>
 
@@ -210,6 +208,7 @@ TEST(Fonctionnel, un)  {
     automate.lecture((char *) "res/programme_ok.txt");
     Symbole* p = automate.analyser();
     cout << p->toString();
+    delete p;
 }
 
 int main(int ac, char** av)

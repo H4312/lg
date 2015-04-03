@@ -19,3 +19,12 @@ Declaration* TableDeclarations::findById(string id)
 	}
 	return nullptr;
 }
+
+void TableDeclarations::afficherTable()
+{
+	for (list<Declaration>::iterator it=declarations.begin(); it != declarations.end(); ++it)
+	{	
+		cout << (*it).getNom() << endl;; 
+		
+	}
+}

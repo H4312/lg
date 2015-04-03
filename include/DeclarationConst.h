@@ -8,6 +8,7 @@ class DeclarationConst : public Declaration
 {
 	public:
 		DeclarationConst() : Declaration(){}
+		const bool isConst = true;
 	protected:
 	private:
 };

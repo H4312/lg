@@ -7,7 +7,9 @@
 class DeclarationConst : public Declaration
 {
 	public:
-		DeclarationConst() : Declaration(){isConst=true;}
+
+		DeclarationConst() : Declaration(){m_isConst = true; m_isAffectee = true;}
+
 	protected:
 	private:
 };

@@ -146,6 +146,94 @@ void Symbole::construireDeclarationConst(TableDeclarations *table)
 	}
 }
 
+//Permet de construire la table des déclarations pour l'analyse statique
+void Symbole::analyserStatiquement()
+{
+	TableDeclarations table;
+	construireTableDeclarations(&table);
+	analyseStatique(table);
+}
+
+//L'analyseur statique
+void Symbole::analyseStatique(TableDeclarations table)
+{
+    TYPE type = this->getType();
+    list<Symbole*> *fils = this->m_fils;
+   
+    switch(type)
+    {
+        case(Symbole::P) :
+            {
+                for (list<Symbole*>::iterator it=fils->begin(); it != fils->end(); ++it)
+                {
+                    (*it)->analyseStatique(table);
+                }
+            }
+			break;
+		case(Symbole::BI) :
+        case(Symbole::O) :
+        case(Symbole::F) :
+        case(Symbole::T) :
+            {
+                for (list<Symbole*>::iterator it=fils->begin(); it != fils->end(); ++it)
+                {
+                    (*it)->analyseStatique(table);
+                }
+            }
+			break;
+        case(Symbole::I):
+            {
+                list<Symbole*>::iterator it=fils->begin();
+                TYPE typeFils = (*it)->getType();
+                
+
+                if (fils->size()>0)
+                {
+					switch(typeFils)
+					{
+					case(Symbole::id) :
+						{
+							string nomLire = (*it)->getNom();
+							Declaration* declarationLire = table.findById(nomLire);
+							if(declarationLire == nullptr)
+							{
+								cerr<<"Erreur dans l'analyse statique: Variable affectée non déclarée"<<endl;
+							}
+							else if(declarationLire->isConstante())
+							{
+								cerr<<"Erreur dans l'analyse statique: Constante ne pas pas être modifiée"<<endl;
+							}
+						}
+						break;
+						case(Symbole::lire) :
+						{
+							string nomLire = (*(--fils->end()))->getNom();
+							Declaration* declarationLire = table.findById(nomLire) ;
+							if(declarationLire == 0)
+							{
+								cerr<<"Erreur dans l'analyse statique: Variable lue non déclarée"<<endl;
+							}
+						}
+						break;
+						case(Symbole::ecrire) :
+						{
+							string nomLire = (*(--fils->begin()))->getNom();
+							Declaration* declarationLire = table.findById(nomLire) ;
+							if(declarationLire == 0)
+							{
+								cerr<<"Erreur dans l'analyse statique: Variable écrite non déclarée"<<endl;
+							}
+						}
+						break;
+					}
+                }
+
+            }
+            break;
+            
+		}       
+}
+
 /*
  * Permet d'exécuter le code lutin
  */
@@ -389,7 +477,7 @@ bool Symbole::operationConstante(std::vector<string> *idConstantes, TableDeclara
 		case(Symbole::id) :
 		{
 			Declaration* declaration = table->findById(m_nom) ;
-			if(declaration->isConst)
+			if(declaration->isConstante())
 			{
 				m_type = Symbole::val;
 				m_nom = "";
@@ -465,14 +553,14 @@ string Symbole::toString1() {
     switch(m_type)
     {
         case pv : return ";";
-        case val : return "val : " +to_string(m_valeur);
-        case cons : return "cons ";
-        case var : return "var ";
+        case val : return "valeur";
+        case cons : return "const";
+        case var : return "var";
         case v : return ", ";
-        case id : return "id : " + m_nom;
+        case id : return "identificateur";
         case eq : return "=";
-        case ecrire : return "ecrire ";
-        case lire : return "lire ";
+        case ecrire : return "ecrire";
+        case lire : return "lire";
         case aff : return ":= ";
         case po : return "(";
         case pf : return ")";
@@ -480,15 +568,15 @@ string Symbole::toString1() {
         case mn : return "-";
         case mul : return "*";
         case divi : return "/";
-        case BD : return "BD";
-        case BI : return "BI";
-        case L : return "L";
-        case O : return "O";
-        case C : return "C";
-        case D : return "D";
-        case I : return "I";
-        case T : return "T";
-        case F : return "F";
+        case BD : return "Bloc Déclaratif";
+        case BI : return "Bloc Instructif";
+        case L : return "Liste de variable";
+        case O : return "Opération";
+        case C : return "Liste de constante";
+        case D : return "Déclaration";
+        case I : return "Instruction";
+        case T : return "Terme";
+        case F : return "Facteur";
         case opA : return "opA";
         case opM : return "opM";
         case P : return "P";

@@ -55,8 +55,9 @@ vector<string> * Lexer::splitFileBySym() {
         }
         if(
                 c == '+' || c == '-' || c == '*'||
+                c == '(' || c==')' ||
                 c == '/' || c == ';' ||
-                c == '=' && !affsym || c == ',')
+                        (c == '=' && !affsym) || c == ',')
         {
             if(current.length() > 0)
             {
@@ -150,6 +151,10 @@ Symbole *Lexer::getSymbole(string str) {
         sym = new Symbole(Symbole::eq);
     } else if(str == "+") {
         sym = new Symbole(Symbole::pl);
+    } else if(str == "(") {
+        sym = new Symbole(Symbole::po);
+    } else if(str == ")") {
+        sym = new Symbole(Symbole::pf);
     } else if(str == "-") {
         sym = new Symbole(Symbole::mn);
     } else if(str == "*") {

@@ -44,6 +44,7 @@ class Symbole
         int eval(TableDeclarations *table); 
         void afficher() ;
         bool operationConstante(vector<string> *idConstantes, TableDeclarations *table);
+        void transformation(TableDeclarations *table);
 
 };
 

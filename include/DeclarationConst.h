@@ -7,8 +7,7 @@
 class DeclarationConst : public Declaration
 {
 	public:
-		DeclarationConst() : Declaration(){}
-		const bool isConst = true;
+		DeclarationConst() : Declaration(){isConst=true;}
 	protected:
 	private:
 };

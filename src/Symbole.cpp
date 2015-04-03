@@ -12,11 +12,7 @@ Symbole::Symbole(Symbole::TYPE unType){
 // Destructeur
 Symbole::~Symbole() 
 {
-	for(auto el : *m_fils)
-	{		
-		el->~Symbole();
-		delete el->m_fils;
-	}	
+	m_fils->clear();	
 }
 
 // Getter
@@ -194,9 +190,7 @@ void Symbole::exec(TableDeclarations* table)
 							erreurFormatNombre = true;
 							cerr << "Veuillez entrer un nombre correct : " << endl;
 							cin >> entreeClavier;
-
 						}
-
 						// On récupère le nom de la variable à affecter 
 						string nomLire = (*(++m_fils->begin()))->m_nom;
 						// On cherche dans la table la déclaration associée
@@ -327,6 +321,11 @@ int Symbole::eval(TableDeclarations* table)
 void Symbole::transformation()
 {
 	TableDeclarations table;
+	transformation(&table);
+}
+
+void Symbole::transformation(TableDeclarations *table)
+{
 	switch(m_type)
 	{
 		// On appelle récursivement transformation jusqu'à tomber sur une O (opération)
@@ -336,7 +335,15 @@ void Symbole::transformation()
 		{
 			for (auto el : *m_fils)
 			{
-				el->transformation();
+				el->transformation(table);
+			}
+			break;
+		}
+		case(Symbole::BD) :
+		{
+			for (auto el : *m_fils)
+			{
+				el->construireTableDeclarations(table);
 			}
 			break;
 		}
@@ -346,21 +353,16 @@ void Symbole::transformation()
 			bool toutesConst = true;
 			for (auto el : *m_fils)
 			{
-				toutesConst = toutesConst && el->operationConstante(&idConstantes, &table);
-				if(!toutesConst) 
-					{
-						cout << "Pas tte const fadaaaa" << endl ;
-						break;
-					}
+				toutesConst = el->operationConstante(&idConstantes, table);
+
 			}
-			break;
-		}
-		case(Symbole::BD) :
-		{
-			for (auto el : *m_fils)
+			if(toutesConst) 
 			{
-				el->construireTableDeclarations(&table);
-			}
+				m_type = Symbole::val;
+				m_valeur = eval(table);
+				m_fils->clear();
+				return;
+			} 
 			break;
 		}
 		default :
@@ -376,18 +378,22 @@ bool Symbole::operationConstante(std::vector<string> *idConstantes, TableDeclara
 		case(Symbole::F) :
 		case(Symbole::T) :
 		{
+			bool tousConst = true;
 			for (auto el : *m_fils)
 			{
-				el->operationConstante(idConstantes, table);
+				bool estConst = el->operationConstante(idConstantes, table);
+				tousConst = tousConst && estConst ;
 			}
-			break;
+			return tousConst ; 
 		}
 		case(Symbole::id) :
 		{
 			Declaration* declaration = table->findById(m_nom) ;
 			if(declaration->isConst)
 			{
-				idConstantes->push_back(m_nom);
+				m_type = Symbole::val;
+				m_nom = "";
+				m_valeur = declaration->getVal();
 				return true;
 			}
 			return false;

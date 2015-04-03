@@ -14,7 +14,7 @@ class Declaration
 		void setNom(std::string nom);
 		double getVal();
 		void setVal(double val);
-		const bool isConst = false;
+		bool isConst ;
 		
 	
 	protected:

@@ -28,8 +28,12 @@ class Symbole
         string toString1();
         void ajouterFils(Symbole*);
         void exec(TableDeclarations *table);
+<<<<<<< HEAD
         void analyserStatiquement();
+
+=======
         void transformation();
+>>>>>>> a44e9773f89e0b84b54a2b482ce26489df860b8d
          
     protected:
 
@@ -44,9 +48,12 @@ class Symbole
         void construireDeclarationConst(TableDeclarations *table);
         int eval(TableDeclarations *table); 
         void afficher() ;
+<<<<<<< HEAD
         bool declarationSansUtilisation(string nom);
-	void analyseStatique(TableDeclarations table);
+		void analyseStatique(TableDeclarations table);
+=======
         bool operationConstante(vector<string> *idConstantes, TableDeclarations *table);
+>>>>>>> a44e9773f89e0b84b54a2b482ce26489df860b8d
 
 };
 

@@ -7,6 +7,7 @@
 class DeclarationConst : public Declaration
 {
 	public:
+		DeclarationConst() : Declaration(){m_isConst = true; m_isAffectee = true;}
 		DeclarationConst() : Declaration(){}
 		const bool isConst = true;
 	protected:

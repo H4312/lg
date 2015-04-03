@@ -13,10 +13,15 @@ class Declaration
 		std::string getNom();
 		void setNom(std::string nom);
 		double getVal();
-		void setVal(double val);		
+		void setVal(double val);
+<<<<<<< HEAD
+		
 		bool isConst(){return m_isConst;}
 		bool isAffectee(){return m_isAffectee;}
+=======
 		const bool isConst = false;
+		
+>>>>>>> a44e9773f89e0b84b54a2b482ce26489df860b8d
 	
 	protected:
 		std::string nom;

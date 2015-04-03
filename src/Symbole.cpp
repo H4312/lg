@@ -150,6 +150,94 @@ void Symbole::construireDeclarationConst(TableDeclarations *table)
 	}
 }
 
+//Permet de construire la table des déclarations pour l'analyse statique
+void Symbole::analyserStatiquement()
+{
+	TableDeclarations table;
+	construireTableDeclarations(&table);
+	analyseStatique(table);
+}
+
+//L'analyseur statique
+void Symbole::analyseStatique(TableDeclarations table)
+{
+    TYPE type = this->getType();
+    list<Symbole*> *fils = this->m_fils;
+   
+    switch(type)
+    {
+        case(Symbole::P) :
+            {
+                for (list<Symbole*>::iterator it=fils->begin(); it != fils->end(); ++it)
+                {
+                    (*it)->analyseStatique(table);
+                }
+            }
+			break;
+		case(Symbole::BI) :
+        case(Symbole::O) :
+        case(Symbole::F) :
+        case(Symbole::T) :
+            {
+                for (list<Symbole*>::iterator it=fils->begin(); it != fils->end(); ++it)
+                {
+                    (*it)->analyseStatique(table);
+                }
+            }
+			break;
+        case(Symbole::I):
+            {
+                list<Symbole*>::iterator it=fils->begin();
+                TYPE typeFils = (*it)->getType();
+                
+
+                if (fils->size()>0)
+                {
+					switch(typeFils)
+					{
+					case(Symbole::id) :
+						{
+							string nomLire = (*it)->getNom();
+							Declaration* declarationLire = table.findById(nomLire);
+							if(declarationLire == nullptr)
+							{
+								cerr<<"Erreur dans l'analyse statique: Variable affectée non déclarée"<<endl;
+							}
+							else if(declarationLire->isConst())
+							{
+								cerr<<"Erreur dans l'analyse statique: Constante ne pas pas être modifiée"<<endl;
+							}
+						}
+						break;
+						case(Symbole::lire) :
+						{
+							string nomLire = (*(--fils->end()))->getNom();
+							Declaration* declarationLire = table.findById(nomLire) ;
+							if(declarationLire == 0)
+							{
+								cerr<<"Erreur dans l'analyse statique: Variable lue non déclarée"<<endl;
+							}
+						}
+						break;
+						case(Symbole::ecrire) :
+						{
+							string nomLire = (*(--fils->begin()))->getNom();
+							Declaration* declarationLire = table.findById(nomLire) ;
+							if(declarationLire == 0)
+							{
+								cerr<<"Erreur dans l'analyse statique: Variable écrite non déclarée"<<endl;
+							}
+						}
+						break;
+					}
+                }
+
+            }
+            break;
+            
+		}       
+}
+
 /*
  * Permet d'exécuter le code lutin
  */

@@ -152,16 +152,16 @@ void Symbole::construireDeclarationConst(TableDeclarations *table)
 //Permet de construire la table des déclarations pour l'analyse statique
 void Symbole::analyserStatiquement()
 {
-	TableSymbole table;
-	ConstruireTableSymbole(table);
+	TableDeclarations table;
+	construireTableDeclarations(&table);
 	analyseStatique(table);
 }
 
 //L'analyseur statique
-void Symbole::analyseStatique(TableSymbole table)
+void Symbole::analyseStatique(TableDeclarations table)
 {
     TYPE type = this->getType();
-    list<Symbole*> *fils = this->getFils();
+    list<Symbole*> *fils = this->m_fils;
    
     switch(type)
     {

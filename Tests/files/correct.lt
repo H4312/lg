@@ -4,6 +4,6 @@ const d = 6;
 var e;
 a := (c+d)*3-5;
 lire b;
-ecrire a*b;
+ecrire a/b;
 e := b+d;
 ecrire e;

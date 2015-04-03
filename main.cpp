@@ -14,9 +14,11 @@ int main(int argc, char** argv)
         return 1;
     }
     Automate automate;
-    TableSymbole table;
-    automate.lecture(argv[argc-1]);
-    automate.analyser();
+    if(!automate.lecture(argv[argc-1]))
+    {
+        return 1;
+    }
+    else automate.analyser();
     
     for(int i = 1 ; i < argc-1 ; i++) 
     {
@@ -26,8 +28,7 @@ int main(int argc, char** argv)
         }
         else if(strcmp(argv[i],"-e")==0)
         {
-            automate.programme->exec(&table);
-            //table.afficherTable();
+            automate.exec();
         }
         else if(strcmp(argv[i],"-p")==0)
         {
@@ -39,7 +40,5 @@ int main(int argc, char** argv)
             return 1;
         }
     }
-
-
     return 0;
 }

@@ -1,5 +1,4 @@
 #include "DeclarationVar.h"
-#include "TableSymbole.h"
 
 using namespace std;
 

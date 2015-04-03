@@ -17,14 +17,18 @@ Automate::Automate()
 
 Automate::~Automate()
 {
-    delete programme;
+	delete programme;
 }
 
-void Automate::lecture(char* filename)
+bool Automate::lecture(char* filename)
 {
 	m_transitions = initMap();
-	lexer.openFile(filename);
-	lexer.splitFileBySym();
+	if(lexer.openFile(filename))
+	{
+		lexer.splitFileBySym();
+		return true;
+	}
+	else return false;
 }
 
 
@@ -130,6 +134,11 @@ bool Automate::reduire()
 		return false;
 	}
 
+}
+
+void Automate::exec()
+{
+	programme->exec(&table);
 }
 
 map<Etat*, map<TYPE, Etat*> > Automate::initMap() {

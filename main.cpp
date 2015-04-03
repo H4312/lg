@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Automate.h"
+#include <string.h>
 
 using namespace std;
 

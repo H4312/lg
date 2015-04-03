@@ -1,0 +1,28 @@
+Test ID;Return code validation;Out result;StdErr result;File creation result;Global result
+./01.NoArgument;Ok;Non testé;Ok;Non testé;Ok
+./02.FichierInexistant;Ok;Non testé;Ok;Non testé;Ok
+./03.FichierExistant;Ok;Ok;Non testé;Non testé;Ok
+./04.Affichage;Ok;Ok;Non testé;Non testé;Ok
+./05.DoubleDeclaration;Ok;Non testé;Ok;Non testé;Ok
+./06.1.AnalyseStatique;Ok;Ok;Ok;Non testé;Ok
+./06.2.AnalyseStatique;Ok;Ok;Ok;Non testé;Ok
+./06.3.AnalyseStatique;Ok;Ok;Ok;Non testé;Ok
+./06.4.AnalyseStatique;Ok;Ok;Ok;Non testé;Ok
+./07.Execution;Ok;Ok;Non testé;Non testé;Ok
+./08.1.Optimisation;Ok;Ok;Non testé;Non testé;Ok
+./08.2.Optimisation;Ok;Echec;Non testé;Non testé;Echec
+./09.ErreurLexicale;Ok;Ok;Ok;Non testé;Ok
+./1-06.5.AnalyseStatique;Ok;Non testé;Non testé;Non testé;Ok
+./1-06.6.AnalyseStatique;Ok;Ok;Ok;Non testé;Ok
+./1-06.7.AnalyseStatique;Ok;Ok;Ok;Non testé;Ok
+./1-07.1.Execution;Ok;Ok;Ok;Non testé;Ok
+./1-07.2.Execution;Ok;Ok;Non testé;Non testé;Ok
+./1-07.3.Execution;Ok;Ok;Non testé;Non testé;Ok
+./1-07.4.Execution;Ok;Ok;Ok;Non testé;Ok
+./1-07.5.Execution;Ok;Ok;Ok;Non testé;Ok
+./1-09.2ErreurLexical;Ok;Non testé;Ok;Non testé;Ok
+./1-10.2.ErreurSyntaxique;Ok;Non testé;Non testé;Non testé;Ok
+./1-10.3.ErreurSyntaxique;Ok;Non testé;Non testé;Non testé;Ok
+./1-11.FichierVide;Ok;Ok;Non testé;Non testé;Ok
+./1-12.FauxArgument;Ok;Non testé;Ok;Non testé;Ok
+./10.ErreurSyntaxique;Echec;Non testé;Non testé;Non testé;Echec

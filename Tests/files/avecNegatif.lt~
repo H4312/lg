@@ -1,0 +1,3 @@
+var a;
+lire a;
+ecrire 4+a;

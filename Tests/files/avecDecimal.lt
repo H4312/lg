@@ -1,0 +1,6 @@
+var a,x;
+const b = 1.3;
+lire a;
+x := a+b;
+ecrire x;
+

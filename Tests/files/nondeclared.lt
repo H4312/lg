@@ -1,0 +1,6 @@
+var b;
+lire a;
+ecrire a;
+b:=3;
+a:=b;
+ecrire b;

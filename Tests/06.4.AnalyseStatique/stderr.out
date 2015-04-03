@@ -1,0 +1,3 @@
+Erreur dans l'analyse statique : Variable 'a' lue non déclarée
+Erreur dans l'analyse statique : Variable 'a' écrite non déclarée
+Erreur dans l'analyse statique : Variable 'a' affectée non déclarée

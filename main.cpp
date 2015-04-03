@@ -12,6 +12,15 @@ int main(int argc, char** argv)
         cerr << erreurArgument << endl;
         return 1;
     }
+    for(int i = 1 ; i < argc-1 ; i++) 
+    {
+        if(strcmp(argv[i],"-p")!=0 && strcmp(argv[i],"-e")!=0 && strcmp(argv[i], "-a")!=0)
+        {
+            cerr << erreurArgument << endl;
+            return 1;
+        }
+    }
+
     Automate automate;
     if(!automate.lecture(argv[argc-1]))
     {
@@ -23,7 +32,7 @@ int main(int argc, char** argv)
     {
         if(strcmp(argv[i], "-a")==0)
         {
-            automate.programme->analyserStatiquement() << endl;
+            automate.programme->analyserStatiquement();
         }
         else if(strcmp(argv[i],"-e")==0)
         {

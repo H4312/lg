@@ -12,7 +12,11 @@ Symbole::Symbole(Symbole::TYPE unType){
 // Destructeur
 Symbole::~Symbole() 
 {
-	m_fils->clear();	
+	for(auto el : *m_fils)
+	{		
+		el->~Symbole();
+		delete el->m_fils;
+	}	
 }
 
 // Getter
@@ -146,94 +150,6 @@ void Symbole::construireDeclarationConst(TableDeclarations *table)
 	}
 }
 
-//Permet de construire la table des déclarations pour l'analyse statique
-void Symbole::analyserStatiquement()
-{
-	TableDeclarations table;
-	construireTableDeclarations(&table);
-	analyseStatique(table);
-}
-
-//L'analyseur statique
-void Symbole::analyseStatique(TableDeclarations table)
-{
-    TYPE type = this->getType();
-    list<Symbole*> *fils = this->m_fils;
-   
-    switch(type)
-    {
-        case(Symbole::P) :
-            {
-                for (list<Symbole*>::iterator it=fils->begin(); it != fils->end(); ++it)
-                {
-                    (*it)->analyseStatique(table);
-                }
-            }
-			break;
-		case(Symbole::BI) :
-        case(Symbole::O) :
-        case(Symbole::F) :
-        case(Symbole::T) :
-            {
-                for (list<Symbole*>::iterator it=fils->begin(); it != fils->end(); ++it)
-                {
-                    (*it)->analyseStatique(table);
-                }
-            }
-			break;
-        case(Symbole::I):
-            {
-                list<Symbole*>::iterator it=fils->begin();
-                TYPE typeFils = (*it)->getType();
-                
-
-                if (fils->size()>0)
-                {
-					switch(typeFils)
-					{
-					case(Symbole::id) :
-						{
-							string nomLire = (*it)->getNom();
-							Declaration* declarationLire = table.findById(nomLire);
-							if(declarationLire == nullptr)
-							{
-								cerr<<"Erreur dans l'analyse statique: Variable affectée non déclarée"<<endl;
-							}
-							else if(declarationLire->isConstante())
-							{
-								cerr<<"Erreur dans l'analyse statique: Constante ne pas pas être modifiée"<<endl;
-							}
-						}
-						break;
-						case(Symbole::lire) :
-						{
-							string nomLire = (*(--fils->end()))->getNom();
-							Declaration* declarationLire = table.findById(nomLire) ;
-							if(declarationLire == 0)
-							{
-								cerr<<"Erreur dans l'analyse statique: Variable lue non déclarée"<<endl;
-							}
-						}
-						break;
-						case(Symbole::ecrire) :
-						{
-							string nomLire = (*(--fils->begin()))->getNom();
-							Declaration* declarationLire = table.findById(nomLire) ;
-							if(declarationLire == 0)
-							{
-								cerr<<"Erreur dans l'analyse statique: Variable écrite non déclarée"<<endl;
-							}
-						}
-						break;
-					}
-                }
-
-            }
-            break;
-            
-		}       
-}
-
 /*
  * Permet d'exécuter le code lutin
  */
@@ -278,7 +194,9 @@ void Symbole::exec(TableDeclarations* table)
 							erreurFormatNombre = true;
 							cerr << "Veuillez entrer un nombre correct : " << endl;
 							cin >> entreeClavier;
+
 						}
+
 						// On récupère le nom de la variable à affecter 
 						string nomLire = (*(++m_fils->begin()))->m_nom;
 						// On cherche dans la table la déclaration associée
@@ -409,11 +327,6 @@ int Symbole::eval(TableDeclarations* table)
 void Symbole::transformation()
 {
 	TableDeclarations table;
-	transformation(&table);
-}
-
-void Symbole::transformation(TableDeclarations *table)
-{
 	switch(m_type)
 	{
 		// On appelle récursivement transformation jusqu'à tomber sur une O (opération)
@@ -423,15 +336,7 @@ void Symbole::transformation(TableDeclarations *table)
 		{
 			for (auto el : *m_fils)
 			{
-				el->transformation(table);
-			}
-			break;
-		}
-		case(Symbole::BD) :
-		{
-			for (auto el : *m_fils)
-			{
-				el->construireTableDeclarations(table);
+				el->transformation();
 			}
 			break;
 		}
@@ -441,16 +346,21 @@ void Symbole::transformation(TableDeclarations *table)
 			bool toutesConst = true;
 			for (auto el : *m_fils)
 			{
-				toutesConst = el->operationConstante(&idConstantes, table);
-
+				toutesConst = toutesConst && el->operationConstante(&idConstantes, &table);
+				if(!toutesConst) 
+					{
+						cout << "Pas tte const fadaaaa" << endl ;
+						break;
+					}
 			}
-			if(toutesConst) 
+			break;
+		}
+		case(Symbole::BD) :
+		{
+			for (auto el : *m_fils)
 			{
-				m_type = Symbole::val;
-				m_valeur = eval(table);
-				m_fils->clear();
-				return;
-			} 
+				el->construireTableDeclarations(&table);
+			}
 			break;
 		}
 		default :
@@ -466,22 +376,18 @@ bool Symbole::operationConstante(std::vector<string> *idConstantes, TableDeclara
 		case(Symbole::F) :
 		case(Symbole::T) :
 		{
-			bool tousConst = true;
 			for (auto el : *m_fils)
 			{
-				bool estConst = el->operationConstante(idConstantes, table);
-				tousConst = tousConst && estConst ;
+				el->operationConstante(idConstantes, table);
 			}
-			return tousConst ; 
+			break;
 		}
 		case(Symbole::id) :
 		{
 			Declaration* declaration = table->findById(m_nom) ;
-			if(declaration->isConstante())
+			if(declaration->isConst)
 			{
-				m_type = Symbole::val;
-				m_nom = "";
-				m_valeur = declaration->getVal();
+				idConstantes->push_back(m_nom);
 				return true;
 			}
 			return false;
@@ -568,7 +474,7 @@ string Symbole::toString1() {
         case mn : return "-";
         case mul : return "*";
         case divi : return "/";
-        case BD : return "Bloc Déclaratif";
+        /*case BD : return "Bloc Déclaratif";
         case BI : return "Bloc Instructif";
         case L : return "Liste de variable";
         case O : return "Opération";
@@ -579,7 +485,7 @@ string Symbole::toString1() {
         case F : return "Facteur";
         case opA : return "opA";
         case opM : return "opM";
-        case P : return "P";
+        case P : return "P";*/
         case defaut : return "defaut";
         default:
             string result = "";

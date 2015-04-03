@@ -7,7 +7,8 @@
 class DeclarationVar : public Declaration
 {
 	public:
-		DeclarationVar(std::string nom) : Declaration(nom){}
+		DeclarationVar(std::string id) : Declaration(id){m_isConst = false;}
+		void setIsAffectee(bool test){m_isAffectee = test;}
 	protected:
 	private:
 };

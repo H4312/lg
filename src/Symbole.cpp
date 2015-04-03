@@ -203,7 +203,7 @@ void Symbole::analyseStatique(TableDeclarations table)
 							{
 								cerr<<"Erreur dans l'analyse statique: Variable affectée non déclarée"<<endl;
 							}
-							else if(declarationLire->isConst())
+							else if(declarationLire->isConstante())
 							{
 								cerr<<"Erreur dans l'analyse statique: Constante ne pas pas être modifiée"<<endl;
 							}

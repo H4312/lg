@@ -57,7 +57,7 @@ vector<string> * Lexer::splitFileBySym() {
                 c == '+' || c == '-' || c == '*'||
                 c == '(' || c==')' ||
                 c == '/' || c == ';' ||
-                c == '=' && !affsym || c == ',')
+                        (c == '=' && !affsym) || c == ',')
         {
             if(current.length() > 0)
             {

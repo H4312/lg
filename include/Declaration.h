@@ -14,7 +14,7 @@ class Declaration
 		void setNom(std::string nom);
 		double getVal();
 		void setVal(double val);		
-		bool isConst(){return m_isConst;}
+		bool isConstante(){return m_isConst;}
 		bool isAffectee(){return m_isAffectee;}
 		const bool isConst = false;
 	

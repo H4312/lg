@@ -14,6 +14,7 @@ class TableDeclarations
 		void ajouterDeclaration(Declaration declaration);
 		std::list<Declaration> declarations;
 		Declaration* findById(string id);
+		void afficherTable();
 
 	protected:
 	private:

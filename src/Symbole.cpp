@@ -122,7 +122,7 @@ void Symbole::construireDeclarationConst(TableDeclarations *table)
 	DeclarationConst constante;
 	for (auto el : *m_fils)
 	{
-		switch(m_type)
+		switch(el->m_type)
 		{
 			// Tant qu'on a pas un id on appelle récursivement
 			case(Symbole::C) :
@@ -133,6 +133,7 @@ void Symbole::construireDeclarationConst(TableDeclarations *table)
 			// Si on a un id on set le nom
 			case(Symbole::id) :
 			{
+				//cout << el->m_nom << endl;
 				constante.setNom(el->m_nom);
 				break;
 			}
@@ -308,7 +309,6 @@ void Symbole::exec(TableDeclarations* table)
 		default :
 			break;
 	}
-
 }
 
 // Méthodes publiques
@@ -332,8 +332,8 @@ int Symbole::eval(TableDeclarations* table)
 		list<Symbole*>::const_iterator itDebut= m_fils->begin(); 
 		list<Symbole*>::const_iterator itMilieu=++m_fils->begin();
 		list<Symbole*>::const_iterator itFin=--m_fils->end(); 
-		
-		switch((*itMilieu)->getType())
+	
+		switch((*itMilieu)->m_type)
 		{
 			// Si on tombe sur un opérateur additif
 			case(Symbole::opA) :
@@ -409,6 +409,79 @@ int Symbole::eval(TableDeclarations* table)
 			default :
 				break;
 		}
+	}
+}
+
+void Symbole::transformation()
+{
+	TableDeclarations table;
+	switch(m_type)
+	{
+		// On appelle récursivement transformation jusqu'à tomber sur une O (opération)
+		case(Symbole::P) :
+		case(Symbole::BI) :
+		case(Symbole::I) :
+		{
+			for (auto el : *m_fils)
+			{
+				el->transformation();
+			}
+			break;
+		}
+		case(Symbole::O) :
+		{
+			std::vector<string> idConstantes;
+			bool toutesConst = true;
+			for (auto el : *m_fils)
+			{
+				toutesConst = toutesConst && el->operationConstante(&idConstantes, &table);
+				if(!toutesConst) 
+					{
+						cout << "Pas tte const fadaaaa" << endl ;
+						break;
+					}
+			}
+			break;
+		}
+		case(Symbole::BD) :
+		{
+			for (auto el : *m_fils)
+			{
+				el->construireTableDeclarations(&table);
+			}
+			break;
+		}
+		default :
+			break;
+	}
+}
+
+bool Symbole::operationConstante(std::vector<string> *idConstantes, TableDeclarations *table)
+{
+	switch(m_type)
+	{
+		case(Symbole::O) :
+		case(Symbole::F) :
+		case(Symbole::T) :
+		{
+			for (auto el : *m_fils)
+			{
+				el->operationConstante(idConstantes, table);
+			}
+			break;
+		}
+		case(Symbole::id) :
+		{
+			Declaration* declaration = table->findById(m_nom) ;
+			if(declaration->isConst)
+			{
+				idConstantes->push_back(m_nom);
+				return true;
+			}
+			return false;
+		}
+		default :
+			break;
 	}
 }
 

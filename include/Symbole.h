@@ -2,6 +2,7 @@
 #define SYMBOLE_H
 #include <string>
 #include <list>
+#include <vector>
 #include "TableDeclarations.h"
 
 using namespace std;
@@ -28,7 +29,7 @@ class Symbole
         void ajouterFils(Symbole*);
         void exec(TableDeclarations *table);
         void analyserStatiquement();
-
+        void transformation();
          
     protected:
 
@@ -44,7 +45,8 @@ class Symbole
         int eval(TableDeclarations *table); 
         void afficher() ;
         bool declarationSansUtilisation(string nom);
-		void analyseStatique(TableDeclarations table);
+	void analyseStatique(TableDeclarations table);
+        bool operationConstante(vector<string> *idConstantes, TableDeclarations *table);
 
 };
 
